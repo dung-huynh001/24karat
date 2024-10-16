@@ -20,43 +20,27 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm p-0 m-0">
             <div class="container">
-                <a class="navbar-brand fw-bold fs-4" href="{{ url('/') }}">
-                    <img src="{{ url('/build/images/logo.webp') }}" alt="logo img">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand d-flex flex-column align-items-end" href="{{ url('/') }}">
+                    <img src="{{ url('/build/images/logo.webp') }}" alt="logo img"
+                        style="width: 160px; height: 60px; object-fit: cover;">
+                    <span class="d-flex justify-content-center align-items-center gap-1">
+                        <span>
+                            <i class="fa-regular fa-address-card fs-3"></i>
+                        </span>
+                        <span class="fw-bold">会員管理</span>
+                    </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto gap-4">
-                        <li><a class="nav-link text-decoration-none text-muted" href="">Dashboard</a></li>
-                        <li class="dropdown">
-                            <a id="managerDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                Managers
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="managerDropdown">
-                                <a class="dropdown-item" href="#">
-                                    View
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    Add New
-                                </a>
-                            </div>
-                        </li>
-                        <li><a class="nav-link text-decoration-none text-muted" href="#">Another</a></li>
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
+                <div class="collapse navbar-collapse align-self-end" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
+
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -70,29 +54,92 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Hi, {{ Auth::user()->name }}
-                                </a>
+                            <li class="nav-item dropdown d-none d-sm-flex bg-light p-3">
+                                <div id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fs-1">
+                                            <img class="rounded-circle" src="{{url('/build/images/default-user.png')}}"
+                                                alt="user-img" style="width: 45px">
+                                        </span>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-muted fw-light" style="font-size: .67rem">ようこそ</span>
+                                            <span class="nav-link px-0 fw-bold fs-5">
+                                                {{ Auth::user()->name }} ユーザー
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa-solid fa-user-pen pe-1"></i>
+                                            {{ __('プロフィール編集') }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fa-solid fa-arrow-right-from-bracket pe-1"></i>
+                                            {{ __('ログアウト') }}
+                                        </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                                                             document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </div>
                                 </div>
+
                             </li>
                         @endguest
                     </ul>
                 </div>
             </div>
         </nav>
+        <!-- Mobile Menu -->
+        <div class="collapse navbar-collapse align-self-end" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto gap-4 p-3">
+                <li><a class="nav-link text-decoration-none text-muted" href="">管理者</a></li>
+                <li><a class="nav-link text-decoration-none text-muted" href="#">契約ユーザー</a></li>
+                <li><a class="nav-link text-decoration-none text-muted" href="">フィールド管理</a></li>
+                <li>
+                    <a class="btn btn-danger w-100" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        {{ __('ログアウト') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <!-- End Mobile Menu-->
+
+        <!-- Desktop Menu -->
+        <div class="d-none d-md-block" style="background-color: #8ca5b4">
+            <div class="container">
+                <ul class="d-flex gap-4 p-3 text-white" style="list-style-type: none">
+                    <li>
+                        <a class="nav-link text-decoration-none" href="">
+                            <i class="fa-solid fa-user-group fs-8"></i>
+                            <span>管理者</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-decoration-none" style="opacity: .5" href="">
+                            <i class="fa-solid fa-users fs-8"></i>
+                            <span>契約ユーザー</span>
+                        </a>
+                    </li>
+                    <li>
+
+                        <a class="nav-link text-decoration-none" style="opacity: .5" href=""><i
+                                class="fa-solid fa-table-list fs-8"></i>
+                            <span>フィールド管理</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- End Desktop Menu -->
+
 
         <main class="py-4">
             <div class="container">
