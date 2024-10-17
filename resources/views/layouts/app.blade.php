@@ -54,7 +54,7 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown d-none d-sm-flex bg-light p-3">
+                            <li class="nav-item dropdown d-none d-sm-flex bg-light px-3 py-4">
                                 <div id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false" v-pre>
                                     <div class="d-flex align-items-center gap-2">
@@ -141,7 +141,7 @@
         <!-- End Desktop Menu -->
 
 
-        <main class="py-4">
+        <main class="py-2">
             <div class="container">
                 @yield('breadcrumb')
                 <div class="mb-3"></div>
