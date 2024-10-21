@@ -5,16 +5,21 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 export default defineConfig({
     plugins: [
         laravel({
-            input: ["resources/sass/app.scss", "resources/js/app.js"],
+            input: [
+                "resources/sass/app.scss", 
+                "resources/js/app.js",
+                "resources/css/datatables.min.css",
+                "resources/js/datatables.min.js",
+            ],
             refresh: true,
         }),
         viteStaticCopy({
             targets: [
                 {
-                    src: 'resources/images/*',
-                    dest: 'images'
-                }
-            ]
+                    src: "resources/images/*",
+                    dest: "images",
+                },
+            ],
         }),
     ],
 });

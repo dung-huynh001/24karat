@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class ManagerController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,9 +24,10 @@ class HomeController extends Controller
     public function index()
     {
         $breadcrumbs = [
-            ['title' => 'ダッシュボード', 'url' => '/dashboard', 'active' => true],
+            ['title' => 'ダッシュボード', 'url' => '/dashboard', 'active' => false],
+            ['title' => '管理者', 'url' => '/manager/list', 'active' => true],
         ];
 
-        return view('home', compact('breadcrumbs'));
+        return view('manager.list', compact('breadcrumbs'));
     }
 }
