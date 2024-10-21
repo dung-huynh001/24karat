@@ -2,8 +2,10 @@
 @extends('layouts.breadcrumb')
 @section('content')
 <!-- DataTables CSS -->
-<link rel="stylesheet" href="/path/to/datatables/css/jquery.dataTables.min.css">
-<!-- DataTables JS -->
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
+<link rel="stylesheet" href="{{ asset('datatables/css/datatables.min.css') }}">
+
+
 
 <table id="myTable" class="display">
     <thead>
@@ -37,7 +39,8 @@ foreach ($users as $user) {
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/path/to/datatables/js/jquery.dataTables.min.js"></script>
+<!-- DataTables JS -->
+<script src="{{ asset('datatables/js/datatables.min.js') }}"></script>
 
 <script>
     $(document).ready(function () {

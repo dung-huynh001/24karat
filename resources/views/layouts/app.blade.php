@@ -95,7 +95,7 @@
         <!-- Mobile Menu -->
         <div class="collapse navbar-collapse align-self-end" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto gap-4 p-3">
-                <li><a class="nav-link text-decoration-none text-muted" href="">管理者</a></li>
+                <li><a class="nav-link text-decoration-none text-muted" href="{{route('manager.list')}}">管理者</a></li>
                 <li><a class="nav-link text-decoration-none text-muted" href="#">契約ユーザー</a></li>
                 <li><a class="nav-link text-decoration-none text-muted" href="">フィールド管理</a></li>
                 <li>
@@ -117,7 +117,7 @@
             <div class="container">
                 <ul class="d-flex gap-4 p-3 text-white" style="list-style-type: none">
                     <li>
-                        <a class="nav-link text-decoration-none" href="">
+                        <a class="nav-link text-decoration-none" href="{{route('manager.list')}}">
                             <i class="fa-solid fa-user-group fs-8"></i>
                             <span>管理者</span>
                         </a>
