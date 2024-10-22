@@ -50,6 +50,15 @@
                         var date = new Date(data);
                         return date.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
                     }
+                },
+                {
+                    title: '操作',
+                    data: 'admin_user_id',
+                    name: 'admin_user_id',
+                    render: function (data, type, row) {
+                        var actions = '<div class="d-flex gap-1"><button data-id="$data" class="btn btn-success fs-8">編集</button><button data-id="$data" class="btn btn-danger fs-8">削除</button></div>'
+                        return actions;
+                    }
                 }
             ]
         });
