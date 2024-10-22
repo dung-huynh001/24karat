@@ -15,7 +15,7 @@ class CreateAdminUsersTable extends Migration
     {
         Schema::create('admin_users', function (Blueprint $table) {
             $table->bigIncrements('admin_user_id')->primary(); // BIGINT(20) auto_increment
-            $table->unsignedBigInteger('subcription_user_id')->nullable(); // BIGINT(20) allow null
+            $table->unsignedBigInteger('subscription_user_id')->nullable(); // BIGINT(20) allow null
             $table->tinyInteger('is_butterflydance_user')->nullable(); // TINYINT(4) allow null
             $table->string('name', 100)->nullable(); // VARCHAR(100) allow null
             $table->string('email', 100); // VARCHAR(100) 

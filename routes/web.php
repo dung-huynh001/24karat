@@ -11,3 +11,4 @@ Route::get("/", function () {
 });
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/manager/list', [ManagerController::class, 'index'])->name('manager.list');
+Route::get('/manager/get-managers', [ManagerController::class, 'getManagers'])->name('manager.get-managers');

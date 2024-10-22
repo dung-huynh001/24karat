@@ -5,46 +5,54 @@
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
 <link rel="stylesheet" href="{{ asset('datatables/css/datatables.min.css') }}">
 
-
-
-<table id="myTable" class="display">
+<table id="managerTbl" class="display">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Tên</th>
+            <!-- <th>ID</th>
+            <th>Name</th>
             <th>Email</th>
-            <th>Ngày tạo</th>
+            <th>Created At</th>
+            <th>Updated At</th> -->
         </tr>
     </thead>
-    <tbody>
-        <?php
-// Giả sử bạn có một array chứa dữ liệu người dùng
-$users = [
-    ['id' => 1, 'name' => 'Nguyen Van A', 'email' => 'a@example.com', 'created_at' => '2024-01-01'],
-    ['id' => 2, 'name' => 'Le Thi B', 'email' => 'b@example.com', 'created_at' => '2024-01-05'],
-    // Thêm nhiều dữ liệu khác
-];
-
-foreach ($users as $user) {
-    echo "<tr>
-                    <td>{$user['id']}</td>
-                    <td>{$user['name']}</td>
-                    <td>{$user['email']}</td>
-                    <td>{$user['created_at']}</td>
-                  </tr>";
-}
-        ?>
-    </tbody>
 </table>
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- jQuery -->
+<script src="{{ asset('datatables/js/jquery-3.6.0.min.js') }}"></script>
 <!-- DataTables JS -->
 <script src="{{ asset('datatables/js/datatables.min.js') }}"></script>
 
 <script>
     $(document).ready(function () {
-        $('#myTable').DataTable();
+        $('#managerTbl').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ url('manager/get-managers') }}",
+            columns: [
+                { title: 'ID', data: 'admin_user_id', name: 'admin_user_id' },
+                { title: '名前', data: 'name', name: 'name' },
+                { title: 'メールアドレス', data: 'email', name: 'email' },
+                { title: '契約ユーザー', data: 'company_name', name: 'company_name' },
+                {
+                    title: '作成日',
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function (data, type, row) {
+                        var date = new Date(data);
+                        return date.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+                    }
+                },
+                {
+                    title: '更新日時',
+                    data: 'updated_at',
+                    name: 'updated_at',
+                    render: function (data, type, row) {
+                        var date = new Date(data);
+                        return date.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+                    }
+                }
+            ]
+        });
     });
 </script>
 @endsection
