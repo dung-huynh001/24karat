@@ -129,7 +129,6 @@
                         </a>
                     </li>
                     <li>
-
                         <a class="nav-link text-decoration-none" style="opacity: .5" href=""><i
                                 class="fa-solid fa-table-list fs-8"></i>
                             <span>フィールド管理</span>
@@ -144,8 +143,10 @@
         <main class="py-2">
             <div class="container">
                 @yield('breadcrumb')
-                <div class="mb-3"></div>
-                @yield('content')
+                <div class="mb-4"></div>
+                <div class="bg-white p-3">
+                    @yield('content')
+                </div>
             </div>
         </main>
         <footer class="position-fixed bottom-0 w-100 bg-white">

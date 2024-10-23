@@ -21,7 +21,7 @@
 <body>
     <div id="app">
         <main class="container">
-            <div class="d-flex justify-content-center align-items-center"  style="min-height: 100vh">
+            <div class="d-flex justify-content-center align-items-center bg-white" style="min-height: 100vh">
                 @yield('content')
             </div>
         </main>

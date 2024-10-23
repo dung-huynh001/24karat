@@ -1,22 +1,99 @@
 // Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url("https://fonts.bunny.net/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
 @import "@fortawesome/fontawesome-free/css/all.css";
 
 .fs-7 {
-    font-size: .78rem !important;
+    font-size: 0.78rem !important;
 }
 
 .fs-8 {
-    font-size: .67rem !important;
+    font-size: 0.67rem !important;
 }
 
 .fs-9 {
-    font-size: .53rem !important;
+    font-size: 0.53rem !important;
+}
+
+.fs-10 {
+    font-size: 0.45rem !important;
+}
+
+/* Square size 10x10 */
+.square-9 {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+/* Square size 20x20 */
+.square-8 {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* Square size 25x25 */
+.square-7 {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+/* Square size 45x45 */
+.square-6 {
+    width: 45px !important;
+    height: 45px !important;
+}
+
+/* Square size 50x50 */
+.square-5 {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+/* Square size 100x100 */
+.square-4 {
+    width: 100px !important;
+    height: 100px !important;
+}
+
+/* Square size 150x150 */
+.square-3 {
+    width: 150px !important;
+    height: 150px !important;
+}
+
+/* Square size 200x200 */
+.square-2 {
+    width: 200px !important;
+    height: 200px !important;
+}
+
+/* Square size 250x250 */
+.square-1 {
+    width: 250px !important;
+    height: 250px !important;
+}
+
+table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+    bottom: 20% !important;
+    left: 65% !important;
+    content: "↓" !important;
+    content: "↓" / "" !important;
+}
+
+table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
+    top: 20% !important;
+    content: "↑" !important;
+    content: "↑" / "" !important;
 }

@@ -5,15 +5,11 @@
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
 <link rel="stylesheet" href="{{ asset('datatables/css/datatables.min.css') }}">
 
+<button class="btn btn-primary">管理者登録</button>
+
 <table id="managerTbl" class="display">
     <thead>
-        <tr>
-            <!-- <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Created At</th>
-            <th>Updated At</th> -->
-        </tr>
+        <tr></tr>
     </thead>
 </table>
 
@@ -27,9 +23,27 @@
         $('#managerTbl').DataTable({
             processing: true,
             serverSide: true,
+            orderClasses: ['sorting_disabled', 'sorting', 'sorting_asc_custom', 'sorting_desc_custom'],
+            language: {
+                sLengthMenu: "_MENU_",
+                sInfo: "_END_ 件 _PAGE_ ページ目",
+                sProcessing: "処理中...",
+                sZeroRecords: "データはありません。",
+                sInfoEmpty: " 0 件中 0 から 0 まで表示",
+                sInfoFiltered: "（全 _MAX_ 件より抽出）",
+                sInfoPostFix: "",
+                sSearch: "検索:",
+                sUrl: "",
+                oPaginate: {
+                    "sFirst": "先頭",
+                    "sPrevious": "前",
+                    "sNext": "次",
+                    "sLast": "最終"
+                }
+            },
             ajax: "{{ url('manager/get-managers') }}",
             columns: [
-                { title: 'ID', data: 'admin_user_id', name: 'admin_user_id' },
+                { title: 'No.', data: 'admin_user_id', name: 'admin_user_id' },
                 { title: '名前', data: 'name', name: 'name' },
                 { title: 'メールアドレス', data: 'email', name: 'email' },
                 { title: '契約ユーザー', data: 'company_name', name: 'company_name' },
@@ -53,10 +67,25 @@
                 },
                 {
                     title: '操作',
+                    orderable: false,
                     data: 'admin_user_id',
                     name: 'admin_user_id',
                     render: function (data, type, row) {
-                        var actions = '<div class="d-flex gap-1"><button data-id="$data" class="btn btn-success fs-8">編集</button><button data-id="$data" class="btn btn-danger fs-8">削除</button></div>'
+                        var actions =
+                            `<div class="d-flex gap-1">
+                                <button data-id="${data}" class="btn btn-success fs-8 d-flex align-items-center">
+                                    <span>編集</span>
+                                    <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-success d-inline-flex justify-content-center align-items-center">
+                                        <i class="fa-solid fa-pen p-0 m-0"></i>
+                                    </span>
+                                </button>
+                                <button data-id="${data}" class="btn btn-danger fs-8 d-flex align-items-center">
+                                    <span>削除</span>
+                                    <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-danger d-inline-flex justify-content-center align-items-center">
+                                        <i class="fa-solid fa-trash p-0 m-0"></i>
+                                    </span>
+                                </button>
+                            </div>`;
                         return actions;
                     }
                 }
