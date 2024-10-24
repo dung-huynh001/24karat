@@ -76,12 +76,12 @@
                         var actions =
                             `<div class="dt-actions">
                                 <div class="d-flex gap-2">
-                                    <button data-id="${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
+                                    <a href="/manager/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
                                         <span>編集</span>
                                         <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-emerald d-inline-flex justify-content-center align-items-center">
                                             <i class="fa-solid fa-pen p-0 m-0"></i>
                                         </span>
-                                    </button>
+                                    </a>
                                     <button data-id="${data}" class="btn btn-sunset-orange fs-8 d-flex align-items-center">
                                         <span>削除</span>
                                         <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-sunset-orange d-inline-flex justify-content-center align-items-center">

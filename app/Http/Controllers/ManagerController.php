@@ -43,6 +43,16 @@ class ManagerController extends Controller
         return view('manager.register', compact('breadcrumbs'));
     }
 
+    public function edit($id)
+    {
+        $breadcrumbs = [
+            ['title' => 'ダッシュボード', 'url' => '/home', 'active' => false],
+            ['title' => '管理者', 'url' => '/manager/list', 'active' => false],
+            ['title' => '管理者編集', 'url' => "/manager/edit/$id", 'active' => true],
+        ];
+        return view('manager.edit', compact('breadcrumbs', 'id'));
+    }
+
     public function getManagers()
     {
         $managers = AdminUser::select([
