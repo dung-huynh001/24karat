@@ -33,6 +33,16 @@ class ManagerController extends Controller
         return view('manager.list', compact('breadcrumbs'));
     }
 
+    public function register()
+    {
+        $breadcrumbs = [
+            ['title' => 'ダッシュボード', 'url' => '/home', 'active' => false],
+            ['title' => '管理者', 'url' => '/manager/list', 'active' => false],
+            ['title' => '管理者登録', 'url' => '/manager/register', 'active' => true],
+        ];
+        return view('manager.register', compact('breadcrumbs'));
+    }
+
     public function getManagers()
     {
         $managers = AdminUser::select([
@@ -43,7 +53,7 @@ class ManagerController extends Controller
             'admin_users.updated_at',
             'subscription_users.company_name'
         ])
-            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id'); 
+            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id');
 
         return DataTables::of($managers)->make(true);
     }

@@ -2,10 +2,11 @@
 @extends('layouts.breadcrumb')
 @section('content')
 <!-- DataTables CSS -->
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
 <link rel="stylesheet" href="{{ asset('datatables/css/datatables.min.css') }}">
 
-<button class="btn btn-primary">管理者登録</button>
+<div class="mb-4">
+    <a role="button" href="{{route("manager.register")}}" class="btn btn-royal-blue">管理者登録</a>
+</div>
 
 <table id="managerTbl" class="display">
     <thead>
@@ -66,25 +67,28 @@
                     }
                 },
                 {
-                    title: '操作',
+                    // title: '操作',
+                    // visible: false,
                     orderable: false,
                     data: 'admin_user_id',
                     name: 'admin_user_id',
                     render: function (data, type, row) {
                         var actions =
-                            `<div class="d-flex gap-1">
-                                <button data-id="${data}" class="btn btn-success fs-8 d-flex align-items-center">
-                                    <span>編集</span>
-                                    <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-success d-inline-flex justify-content-center align-items-center">
-                                        <i class="fa-solid fa-pen p-0 m-0"></i>
-                                    </span>
-                                </button>
-                                <button data-id="${data}" class="btn btn-danger fs-8 d-flex align-items-center">
-                                    <span>削除</span>
-                                    <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-danger d-inline-flex justify-content-center align-items-center">
-                                        <i class="fa-solid fa-trash p-0 m-0"></i>
-                                    </span>
-                                </button>
+                            `<div class="dt-actions">
+                                <div class="d-flex gap-2">
+                                    <button data-id="${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
+                                        <span>編集</span>
+                                        <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-emerald d-inline-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-pen p-0 m-0"></i>
+                                        </span>
+                                    </button>
+                                    <button data-id="${data}" class="btn btn-sunset-orange fs-8 d-flex align-items-center">
+                                        <span>削除</span>
+                                        <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-sunset-orange d-inline-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-trash p-0 m-0"></i>
+                                        </span>
+                                    </button>
+                                </div>
                             </div>`;
                         return actions;
                     }

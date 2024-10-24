@@ -40,7 +40,6 @@
                 <div class="collapse navbar-collapse align-self-end" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -139,11 +138,11 @@
         </div>
         <!-- End Desktop Menu -->
 
-
-        <main class="py-2">
+        <main>
             <div class="container">
-                @yield('breadcrumb')
-                <div class="mb-4"></div>
+                <div class="mb-3">
+                    @yield('breadcrumb')
+                </div>
                 <div class="bg-white p-3">
                     @yield('content')
                 </div>

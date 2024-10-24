@@ -9,6 +9,32 @@
 
 @import "@fortawesome/fontawesome-free/css/all.css";
 
+/* Colors Variables */
+:root {
+    --royal-blue: #5d6fe5;
+    --royal-blue-hover: #5c88da;
+    --royal-blue-active: #6699cc;
+
+    --lavender: #E6EFF8;
+    --lavender-hover: #dde5ed;
+    --lavender-active: #ccccff;
+
+    --emerald: #50c468;
+    --emerald-hover: #50a684;
+    --emerald-active: #669999;
+
+    --sunset-orange: #ef585f;
+    --sunset-orange-hover: #ff585d;
+    --sunset-orange-active: #ff6666;
+
+    --bg-gray-1: #f7f7f7;
+}
+
+body {
+    background-color: var(--bg-gray-1);
+}
+
+/* Custom Font Size */
 .fs-7 {
     font-size: 0.78rem !important;
 }
@@ -25,60 +51,131 @@
     font-size: 0.45rem !important;
 }
 
-/* Square size 10x10 */
+/* Custom Buttons */
+.btn-royal-blue {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--royal-blue);
+    --bs-btn-border-color: var(--royal-blue);
+    --bs-btn-hover-color: #666;
+    --bs-btn-hover-bg: var(--royal-blue-hover);
+    --bs-btn-hover-border-color: var(--royal-blue-hover);
+    --bs-btn-focus-shadow-rgb: 207, 92, 66;
+    --bs-btn-active-color: #666;
+    --bs-btn-active-bg: var(--royal-blue-active);
+    --bs-btn-active-border-color: var(--royal-blue-active);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #666;
+    --bs-btn-disabled-bg: var(--royal-blue);
+    --bs-btn-disabled-border-color: var(--royal-blue);
+}
+
+.btn-lavender {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--lavender);
+    --bs-btn-border-color: var(--lavender);
+    --bs-btn-hover-color: #666;
+    --bs-btn-hover-bg: var(--lavender-hover);
+    --bs-btn-hover-border-color: var(--lavender-hover);
+    --bs-btn-focus-shadow-rgb: 207, 92, 66;
+    --bs-btn-active-color: #666;
+    --bs-btn-active-bg: var(--lavender-active);
+    --bs-btn-active-border-color: var(--lavender-active);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #666;
+    --bs-btn-disabled-bg: var(--lavender);
+    --bs-btn-disabled-border-color: var(--lavender);
+}
+
+.btn-emerald {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--emerald);
+    --bs-btn-border-color: var(--emerald);
+    --bs-btn-hover-color: #666;
+    --bs-btn-hover-bg: var(--emerald-hover);
+    --bs-btn-hover-border-color: var(--emerald-hover);
+    --bs-btn-focus-shadow-rgb: 207, 92, 66;
+    --bs-btn-active-color: #666;
+    --bs-btn-active-bg: var(--emerald-active);
+    --bs-btn-active-border-color: var(--emerald-active);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #666;
+    --bs-btn-disabled-bg: var(--emerald);
+    --bs-btn-disabled-border-color: var(--emerald);
+}
+
+.btn-sunset-orange {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--sunset-orange);
+    --bs-btn-border-color: var(--sunset-orange);
+    --bs-btn-hover-color: #666;
+    --bs-btn-hover-bg: var(--sunset-orange-hover);
+    --bs-btn-hover-border-color: var(--sunset-orange-hover);
+    --bs-btn-focus-shadow-rgb: 207, 92, 66;
+    --bs-btn-active-color: #666;
+    --bs-btn-active-bg: var(--sunset-orange-active);
+    --bs-btn-active-border-color: var(--sunset-orange-active);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #666;
+    --bs-btn-disabled-bg: var(--sunset-orange);
+    --bs-btn-disabled-border-color: var(--sunset-orange);
+}
+
+/* Custom Texts */
+.text-emerald {
+    color: var(--emerald);
+}
+
+.text-sunset-orange {
+    color: var(--sunset-orange);
+}
+
+/* Square Boxes */
 .square-9 {
     width: 12px !important;
     height: 12px !important;
 }
 
-/* Square size 20x20 */
 .square-8 {
     width: 16px !important;
     height: 16px !important;
 }
 
-/* Square size 25x25 */
 .square-7 {
     width: 25px !important;
     height: 25px !important;
 }
 
-/* Square size 45x45 */
 .square-6 {
     width: 45px !important;
     height: 45px !important;
 }
 
-/* Square size 50x50 */
 .square-5 {
     width: 50px !important;
     height: 50px !important;
 }
 
-/* Square size 100x100 */
 .square-4 {
     width: 100px !important;
     height: 100px !important;
 }
 
-/* Square size 150x150 */
 .square-3 {
     width: 150px !important;
     height: 150px !important;
 }
 
-/* Square size 200x200 */
 .square-2 {
     width: 200px !important;
     height: 200px !important;
 }
 
-/* Square size 250x250 */
 .square-1 {
     width: 250px !important;
     height: 250px !important;
 }
 
+/* Custom DataTables */
 table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
 table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
 table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
@@ -96,4 +193,32 @@ table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
     top: 20% !important;
     content: "↑" !important;
     content: "↑" / "" !important;
+}
+
+table.dataTable thead tr th:last-child,
+table.dataTable tbody tr td:last-child {
+    width: 0px;
+    padding: 0px;
+}
+
+table.dataTable tbody tr {
+    position: relative;
+}
+
+table.dataTable tbody tr:hover {
+    box-shadow: 1px 2px #e6e6e6;
+}
+
+table.dataTable tbody tr:hover td .dt-actions {
+    display: block;
+}
+
+.dt-actions {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 3px 16px;
+    background-color: #f6f6f6;
 }
