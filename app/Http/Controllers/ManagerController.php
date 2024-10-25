@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminUser;
+use App\Models\SubscriptionUser;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -50,7 +51,28 @@ class ManagerController extends Controller
             ['title' => '管理者', 'url' => '/manager/list', 'active' => false],
             ['title' => '管理者編集', 'url' => "/manager/edit/$id", 'active' => true],
         ];
-        return view('manager.edit', compact('breadcrumbs', 'id'));
+        $manager = AdminUser::select([
+            'admin_users.admin_user_id',
+            'admin_users.name',
+            'admin_users.email',
+            'admin_users.created_at',
+            'admin_users.updated_at',
+            'subscription_users.subscription_user_id',
+            'subscription_users.company_name'
+        ])
+            ->where('admin_users.admin_user_id', $id)
+            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
+            ->first();
+        $subscriptionUsers = SubscriptionUser::select([
+
+            'subscription_users.subscription_user_id',
+            'subscription_users.company_name'
+        ])->get();
+        return view('manager.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'manager' => $manager,
+            'subscriptionUsers' => $subscriptionUsers,
+        ]);
     }
 
     public function getManagers()

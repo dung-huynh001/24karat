@@ -15,7 +15,7 @@
     --royal-blue-hover: #5c88da;
     --royal-blue-active: #6699cc;
 
-    --lavender: #E6EFF8;
+    --lavender: #e6eff8;
     --lavender-hover: #dde5ed;
     --lavender-active: #ccccff;
 
@@ -27,6 +27,11 @@
     --sunset-orange-hover: #ff585d;
     --sunset-orange-active: #ff6666;
 
+    --dark-gunmetal: #212529;
+    --dark-gunmetal-hover: #25282a;
+    --dark-gunmetal-active: #333333;
+
+    --gray-out-1: #999;
     --bg-gray-1: #f7f7f7;
 }
 
@@ -70,18 +75,18 @@ body {
 }
 
 .btn-lavender {
-    --bs-btn-color: #fff;
+    --bs-btn-color: #444;
     --bs-btn-bg: var(--lavender);
     --bs-btn-border-color: var(--lavender);
-    --bs-btn-hover-color: #666;
+    --bs-btn-hover-color: #999;
     --bs-btn-hover-bg: var(--lavender-hover);
     --bs-btn-hover-border-color: var(--lavender-hover);
     --bs-btn-focus-shadow-rgb: 207, 92, 66;
-    --bs-btn-active-color: #666;
+    --bs-btn-active-color: #999;
     --bs-btn-active-bg: var(--lavender-active);
     --bs-btn-active-border-color: var(--lavender-active);
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #666;
+    --bs-btn-disabled-color: #999;
     --bs-btn-disabled-bg: var(--lavender);
     --bs-btn-disabled-border-color: var(--lavender);
 }
@@ -127,6 +132,14 @@ body {
 
 .text-sunset-orange {
     color: var(--sunset-orange);
+}
+
+.text-royal-blue {
+    color: var(--royal-blue);
+}
+
+.text-lavender {
+    color: var(--lavender);
 }
 
 /* Square Boxes */
@@ -222,3 +235,20 @@ table.dataTable tbody tr:hover td .dt-actions {
     padding: 3px 16px;
     background-color: #f6f6f6;
 }
+
+select:invalid {
+    color: var(--gray-out-1);
+}
+
+select option {
+    color: var(--dark-gunmetal);
+}
+
+[hidden] {
+    display: none;
+}
+
+input::placeholder {
+    color: var(--gray-out-1) !important;
+}
+

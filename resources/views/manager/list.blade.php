@@ -14,8 +14,6 @@
     </thead>
 </table>
 
-<!-- jQuery -->
-<script src="{{ asset('datatables/js/jquery-3.6.0.min.js') }}"></script>
 <!-- DataTables JS -->
 <script src="{{ asset('datatables/js/datatables.min.js') }}"></script>
 
