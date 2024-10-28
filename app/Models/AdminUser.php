@@ -23,15 +23,15 @@ class AdminUser extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        // 'subcription_user_id',
-        // 'is_butterflydance_user',
+        'subscription_user_id',
+        'is_butterflydance_user',
         'name',
         'email',
         'password',
         'avatar',
-        // 'temporary_url_token',
-        // 'email_verified_at',
-        // 'remember_token',
+        'temporary_url_token',
+        'email_verified_at',
+        'remember_token',
         'delete_flag',
     ];
 
@@ -50,14 +50,16 @@ class AdminUser extends Authenticatable
      *
      * @var array<string, string>
      */
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    // ];
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function subscriptionUser()
+    {
+        return $this->belongsTo(SubscriptionUser::class, 'subscription_user_id', 'subscription_user_id');
     }
 }

@@ -6,6 +6,10 @@ use App\Models\AdminUser;
 use App\Models\SubscriptionUser;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\Common\FormValidationException;
+use App\Http\Requests\RegisterManagerForm;
+
 
 class ManagerController extends Controller
 {
@@ -14,6 +18,8 @@ class ManagerController extends Controller
      *
      * @return void
      */
+    protected $registerManagerForm;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,6 +30,7 @@ class ManagerController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    //Managers LIST
     public function index()
     {
         $breadcrumbs = [
@@ -34,6 +41,7 @@ class ManagerController extends Controller
         return view('manager.list', compact('breadcrumbs'));
     }
 
+    //Register Manager GET
     public function register()
     {
         $breadcrumbs = [
@@ -41,9 +49,34 @@ class ManagerController extends Controller
             ['title' => '管理者', 'url' => '/manager/list', 'active' => false],
             ['title' => '管理者登録', 'url' => '/manager/register', 'active' => true],
         ];
-        return view('manager.register', compact('breadcrumbs'));
+        $subscriptionUsers = SubscriptionUser::select([
+            'subscription_users.subscription_user_id',
+            'subscription_users.company_name'
+        ])->get();
+        return view('manager.register', compact('breadcrumbs', 'subscriptionUsers'));
     }
 
+    //Register Manager POST
+    public function store()
+    {
+        $formData = request()->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
+        try {
+            $validator = app(RegisterManagerForm::class);
+            $validator->validate($formData);
+
+            AdminUser::create([
+                'subscription_user_id' => intval($formData['subscription_user']),
+                'name' => $formData['name'],
+                'email' => $formData['email'],
+                'password' => bcrypt($formData['password']),
+            ]);
+            return Redirect::route('manager.list')->with('success', '管理者登録が成功しました');
+        } catch (FormValidationException $e) {
+            return Redirect::back()->withInput()->withErrors($e->getErrors());
+        }
+    }
+
+    //Edit Manager GET
     public function edit($id)
     {
         $breadcrumbs = [
@@ -64,7 +97,6 @@ class ManagerController extends Controller
             ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
             ->first();
         $subscriptionUsers = SubscriptionUser::select([
-
             'subscription_users.subscription_user_id',
             'subscription_users.company_name'
         ])->get();
@@ -75,6 +107,7 @@ class ManagerController extends Controller
         ]);
     }
 
+    // GET Manager LIST
     public function getManagers()
     {
         $managers = AdminUser::select([
