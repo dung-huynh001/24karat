@@ -2,7 +2,7 @@
 @extends('layouts.breadcrumb')
 @section('content')
 <!-- DataTables CSS -->
-<link rel="stylesheet" href="{{ asset('datatables/css/datatables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/build/assets/lib/datatables/css/datatables.min.css') }}">
 
 <div class="mb-4">
     <a role="button" href="{{route("manager.register")}}" class="btn btn-royal-blue">管理者登録</a>
@@ -15,7 +15,7 @@
 </table>
 
 <!-- DataTables JS -->
-<script src="{{ asset('datatables/js/datatables.min.js') }}"></script>
+<script src="{{ asset('/build/assets/lib/datatables/js/datatables.min.js') }}"></script>
 
 <script>
     $(document).ready(function () {

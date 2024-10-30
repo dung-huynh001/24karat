@@ -128,4 +128,43 @@
     </form>
 </div>
 
+<script>
+    $('#managerForm').on('submit', (event) => {
+        event.preventDefault();
+
+    });
+
+    function validateForm() {
+        $('#managerForm').validate({
+            rules: {
+                "subscription_user": {
+                    required: true;
+                },
+                "name": {
+                    required: true,
+                },
+                "email": {
+                    required: true,
+                    email: true,
+                },
+                "password": {
+                    required: true,
+                    minlength: 8,
+                    hasDigital: true,
+                    hasSpecialCharacter: true,
+                },
+                "confirm_password": {
+                    required: true,
+                    minlength: 8,
+                    equalTo: "password"
+                },
+            },
+            messages: {
+
+            },
+
+        });
+    }
+</script>
+
 @endsection
