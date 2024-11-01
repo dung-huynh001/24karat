@@ -16,60 +16,65 @@
 </style>
 
 <div class="container-fluid">
-    <form id="managerForm" action="/manager/store" method="POST" class="py-3">
-        @csrf
+    <!-- <form id="managerForm" action="/manager/store" method="POST" class="py-3"> -->
+    <form id="managerForm" class="py-3">
+        {{csrf_field()}}
         <div class="mb-3 row">
             <label for="subscription_user" class="col-sm-2 col-form-label">契約ユーザー <span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <select name="subscription_user" class="form-select" aria-label="契約ユーザー">
+                <select id="subscription_user" name="subscription_user" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($subscriptionUsers as $subscriptionUser)
-                    <option value="{{ $subscriptionUser['subscription_user_id'] }}"
-                        {{ old('subscription_user') == $subscriptionUser['subscription_user_id'] ? 'selected' : '' }}>
-                        {{ $subscriptionUser['company_name'] }}
-                    </option>
+                        <option value="{{ $subscriptionUser['subscription_user_id'] }}"
+                            {{ old('subscription_user') == $subscriptionUser['subscription_user_id'] ? 'selected' : '' }}>
+                            {{ $subscriptionUser['company_name'] }}
+                        </option>
                     @endforeach
                 </select>
-                @if ($errors->has('subscription_user'))
-                @foreach ($errors->get('subscription_user') as $subscriptionUserErrors)
-                @if (is_array($subscriptionUserErrors))
-                @foreach ($subscriptionUserErrors as $msg)
-                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                @endforeach
-                @else
-                <div class="text-sunset-orange error-messages">{{$subscriptionUserErrors}}</div>
-                @endif
-                @endforeach
-                @endif
+                <div id="subscription_user-validate" class="text-sunset-orange"></div>
+                <!-- @if ($errors->has('subscription_user'))
+                    @foreach ($errors->get('subscription_user') as $subscriptionUserErrors)
+                        @if (is_array($subscriptionUserErrors))
+                            @foreach ($subscriptionUserErrors as $msg)
+                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
+                            @endforeach
+                        @else
+                            <div class="text-sunset-orange error-messages">{{$subscriptionUserErrors}}</div>
+                        @endif
+                    @endforeach
+                @endif -->
             </div>
         </div>
 
         <div class="mb-3 row">
             <label for="name" class="col-sm-2 col-form-label">名前 <span class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input type="text" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
-                @error('name')
-                <div class="text-sunset-orange error-messages">{{ $message }}</div>
-                @enderror
+                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
+                <div id="name-validate" class="text-sunset-orange"></div>
+                
+                <!-- @error('name')
+                    <div class="text-sunset-orange error-messages">{{ $message }}</div>
+                @enderror -->
             </div>
         </div>
 
         <div class="mb-3 row">
             <label for="email" class="col-sm-2 col-form-label">メールアドレス <span class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input name="email" class="form-control" placeholder="email@example.com" autocomplete="off">
-                @if ($errors->has('email'))
-                @foreach ($errors->get('email') as $emailErrors)
-                @if (is_array($emailErrors))
-                @foreach ($emailErrors as $msg)
-                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                @endforeach
-                @else
-                <div class="text-sunset-orange error-messages">{{$emailErrors}}</div>
-                @endif
-                @endforeach
-                @endif
+                <input id="email" name="email" class="form-control" placeholder="email@example.com" autocomplete="off">
+                <div id="email-validate" class="text-sunset-orange"></div>
+                <!-- @if ($errors->has('email'))
+                    @foreach ($errors->get('email') as $emailErrors)
+                        @if (is_array($emailErrors))
+                            @foreach ($emailErrors as $msg)
+                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
+                            @endforeach
+                        @else
+                            <div class="text-sunset-orange error-messages">{{$emailErrors}}</div>
+                        @endif
+                    @endforeach
+                @endif -->
             </div>
         </div>
 
@@ -77,18 +82,19 @@
             <label for="password" class="col-sm-2 col-form-label">新しいパスワード <span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input type="password" name="password" class="form-control" autocomplete="off">
-                @if ($errors->has('password'))
-                @foreach ($errors->get('password') as $passwordErrors)
-                @if (is_array($passwordErrors))
-                @foreach ($passwordErrors as $msg)
-                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                @endforeach
-                @else
-                <div class="text-sunset-orange error-messages">{{$passwordErrors}}</div>
-                @endif
-                @endforeach
-                @endif
+                <input type="password" id="password" name="password" class="form-control" autocomplete="off">
+                <div id="password-validate" class="text-sunset-orange"></div>
+                <!-- @if ($errors->has('password'))
+                    @foreach ($errors->get('password') as $passwordErrors)
+                        @if (is_array($passwordErrors))
+                            @foreach ($passwordErrors as $msg)
+                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
+                            @endforeach
+                        @else
+                            <div class="text-sunset-orange error-messages">{{$passwordErrors}}</div>
+                        @endif
+                    @endforeach
+                @endif -->
             </div>
         </div>
 
@@ -96,18 +102,19 @@
             <label for="confirm_password" class="col-sm-2 col-form-label">パスワード（確認）<span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input type="password" name="confirm_password" class="form-control" autocomplete="off">
-                @if ($errors->has('confirm_password'))
-                @foreach ($errors->get('confirm_password') as $confirmPasswordErrors)
-                @if (is_array($confirmPasswordErrors))
-                @foreach ($confirmPasswordErrors as $msg)
-                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                @endforeach
-                @else
-                <div class="text-sunset-orange error-messages">{{$confirmPasswordErrors}}</div>
-                @endif
-                @endforeach
-                @endif
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" autocomplete="off">
+                <div id="confirm_password-validate" class="text-sunset-orange"></div>
+                <!-- @if ($errors->has('confirm_password'))
+                    @foreach ($errors->get('confirm_password') as $confirmPasswordErrors)
+                        @if (is_array($confirmPasswordErrors))
+                            @foreach ($confirmPasswordErrors as $msg)
+                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
+                            @endforeach
+                        @else
+                            <div class="text-sunset-orange error-messages">{{$confirmPasswordErrors}}</div>
+                        @endif
+                    @endforeach
+                @endif -->
             </div>
         </div>
 
@@ -129,54 +136,67 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    $('#managerForm').on('submit', function(event) {
-        validateForm();
-        if ($(this).valid()) {
-            return true;
-        } else {
+    $(document).ready(() => {
+        $('#managerForm').on('submit', (event) => {
+            console.log("Submitted")
             event.preventDefault();
-        }
+            clearValidate();
+            const formFields = getFormFields();
+            $.ajax({
+                type: 'POST',
+                url: '{{route("manager.registerAPI")}}',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    ...formFields,
+                },
+                success: (response) => {
+                    console.log(response);
+                },
+                error: (xhr) => {
+                    const errors = JSON.parse(xhr.responseText);
+                    console.log(errors);
+                    showValidateError(errors);
+                }
+            });
+        });
     });
-});
 
-function validateForm() {
-    $('#managerForm').validate({
-        rules: {
-            subscription_user: {
-                required: true
-            },
-            name: {
-                required: true
-            },
-            email: {
-                required: true,
-                customEmail: true
-            },
-            password: {
-                required: true,
-                minlength: 8,
-                hasDigital: true,
-                hasSpecialCharacter: true,
-            },
-            confirm_password: {
-                required: true,
-                minlength: 8,
-                equalTo: "[name='password']"
+    function getFormFields() {
+        const subscription_user = $('#subscription_user').val();
+        const name = $('#name').val();
+        const email = $('#email').val();
+        const password = $('#password').val();
+        const confirm_password = $('#confirm_password').val();
+
+        const formFields = {
+            "subscription_user": subscription_user,
+            "name": name,
+            "email": email,
+            "password": password,
+            "confirm_password":confirm_password,
+        }
+        
+        return formFields;
+    }
+
+    function showValidateError(errors) {
+        Object.keys(errors).forEach((key) => {
+            console.log(`#${key}-validate`);
+            if(errors[key].length != 0) {
+                return;
             }
-        },
-        errorClass: "text-sunset-orange",
-        errorPlacement: function(error, element) {
-            let $errorContainer = $(element).siblings(".error-container");
-            
-            if ($errorContainer.length === 0) {
-                $errorContainer = $("<div class='error-container'></div>").insertAfter(element);
-            }
-            
-            $errorContainer.append(error);
-        },
-    });
-}
+            $(`#${key}-validate`).text(errors[key]);
+        })
+    }
+
+    function clearValidate() {
+        $('#subscription_user-validate').text("");
+        $('#name-validate').text("");
+        $('#email-validate').text("");
+        $('#password-validate').text("");
+        $('#confirm_password-validate').text("");
+    }
 </script>
 
 

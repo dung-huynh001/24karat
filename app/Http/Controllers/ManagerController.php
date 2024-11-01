@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\ApiResponse;
 use App\Models\AdminUser;
 use App\Models\SubscriptionUser;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Common\FormValidationException;
 use App\Http\Requests\RegisterManagerForm;
-
+use Illuminate\Http\Response;
 
 class ManagerController extends Controller
 {
@@ -73,6 +74,33 @@ class ManagerController extends Controller
             return Redirect::route('manager.list')->with('success', '管理者登録が成功しました');
         } catch (FormValidationException $e) {
             return Redirect::back()->withInput()->withErrors($e->getErrors());
+        }
+    }
+
+    public function registerAPI(Request $request)
+    {
+        $formData = $request->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
+
+        try {
+            $validator = app(RegisterManagerForm::class);
+            $validator->validate($formData);
+
+            if (AdminUser::where('email', $formData['email'])->exists()) {
+                return response()->json(
+                    ["email" => '電子メールが使用されました'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            AdminUser::create([
+                'subscription_user_id' => intval($formData['subscription_user']),
+                'name' => $formData['name'],
+                'email' => $formData['email'],
+                'password' => bcrypt($formData['password']),
+            ]);
+            return response()->json(Response::HTTP_OK);
+        } catch (FormValidationException $e) {
+            return response()->json($e->getErrors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 
