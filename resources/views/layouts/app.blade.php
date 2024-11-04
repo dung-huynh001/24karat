@@ -13,21 +13,23 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="{{asset('/assets/lib/jquery-toast/jquery.toast.css')}}" rel="stylesheet">
 
     <!-- jQuery -->
-    <script src="{{ asset('/build/assets/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('/assets/js/jquery-3.6.0.min.js')}}"></script>
 
     <!-- jQuery validation -->
-    <script src="{{ asset('/build/assets/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('/assets/js/jquery.validate.min.js')}}"></script>
 
     <!-- Vite Scripts -->
     @vite(['resources/js/app.js'])
 
     <!-- Build/Assets/SCSS -->
-    <link rel="stylesheet" href="{{asset("/build/assets/scss/app.scss")}}">
+    <link rel="stylesheet" href="{{asset("/assets/scss/app.scss")}}">
 
     <!-- Build/Assets/JS -->
-    <script src="{{asset("/build/assets/js/app.js")}}"></script>
+    <script src="{{asset("/assets/js/app.js")}}"></script>
+    <script src="{{asset("/assets/lib/jquery-toast/jquery.toast.js")}}"></script>
 </head>
 
 <body>
@@ -35,9 +37,9 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm p-0 m-0">
             <div class="container">
                 <a class="navbar-brand d-flex flex-column align-items-end" href="{{ url('/') }}">
-                    <!-- <img src="{{ url('/build/images/logo.webp') }}" alt="logo img"
+                    <!-- <img src="{{ url('/assets/images/logo.webp') }}" alt="logo img"
                         style="width: 160px; height: 60px; object-fit: cover;"> -->
-                    <img src="{{ asset('/build/assets/images/logo.webp') }}" alt="logo img"
+                    <img src="{{ asset('/assets/images/logo.webp') }}" alt="logo img"
                         style="width: 160px; height: 60px; object-fit: cover;">
                     <span class="d-flex justify-content-center align-items-center gap-1">
                         <span>
@@ -72,9 +74,8 @@
                                     aria-haspopup="true" aria-expanded="false" v-pre>
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="fs-1">
-                                            <img class="rounded-circle"
-                                                src="{{url('/build/assets/images/default-user.png')}}" alt="user-img"
-                                                style="width: 45px">
+                                            <img class="rounded-circle" src="{{url('/assets/images/default-user.png')}}"
+                                                alt="user-img" style="width: 45px">
                                         </span>
                                         <div class="d-flex flex-column">
                                             <span class="text-muted fw-light" style="font-size: .67rem">ようこそ</span>

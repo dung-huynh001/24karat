@@ -87,7 +87,7 @@ class ManagerController extends Controller
 
             if (AdminUser::where('email', $formData['email'])->exists()) {
                 return response()->json(
-                    ["email" => '電子メールが使用されました'],
+                    '電子メールが使用されました',
                     Response::HTTP_BAD_REQUEST
                 );
             }

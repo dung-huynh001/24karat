@@ -1,22 +1,8 @@
 @extends('layouts.app')
 @extends('layouts.breadcrumb')
 @section('content')
-<style>
-.pageLoader {
-    background: url(../images/loader.gif) no-repeat center center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 9999999;
-    background-color: #ffffff8c;
-
-}
-</style>
 
 <div class="container-fluid">
-    <!-- <form id="managerForm" action="/manager/store" method="POST" class="py-3"> -->
     <form id="managerForm" class="py-3">
         {{csrf_field()}}
         <div class="mb-3 row">
@@ -26,24 +12,13 @@
                 <select id="subscription_user" name="subscription_user" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($subscriptionUsers as $subscriptionUser)
-                        <option value="{{ $subscriptionUser['subscription_user_id'] }}"
-                            {{ old('subscription_user') == $subscriptionUser['subscription_user_id'] ? 'selected' : '' }}>
-                            {{ $subscriptionUser['company_name'] }}
-                        </option>
+                    <option value="{{ $subscriptionUser['subscription_user_id'] }}"
+                        {{ old('subscription_user') == $subscriptionUser['subscription_user_id'] ? 'selected' : '' }}>
+                        {{ $subscriptionUser['company_name'] }}
+                    </option>
                     @endforeach
                 </select>
                 <div id="subscription_user-validate" class="text-sunset-orange"></div>
-                <!-- @if ($errors->has('subscription_user'))
-                    @foreach ($errors->get('subscription_user') as $subscriptionUserErrors)
-                        @if (is_array($subscriptionUserErrors))
-                            @foreach ($subscriptionUserErrors as $msg)
-                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                            @endforeach
-                        @else
-                            <div class="text-sunset-orange error-messages">{{$subscriptionUserErrors}}</div>
-                        @endif
-                    @endforeach
-                @endif -->
             </div>
         </div>
 
@@ -52,10 +27,6 @@
             <div class="col-sm-10">
                 <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
                 <div id="name-validate" class="text-sunset-orange"></div>
-                
-                <!-- @error('name')
-                    <div class="text-sunset-orange error-messages">{{ $message }}</div>
-                @enderror -->
             </div>
         </div>
 
@@ -64,17 +35,6 @@
             <div class="col-sm-10">
                 <input id="email" name="email" class="form-control" placeholder="email@example.com" autocomplete="off">
                 <div id="email-validate" class="text-sunset-orange"></div>
-                <!-- @if ($errors->has('email'))
-                    @foreach ($errors->get('email') as $emailErrors)
-                        @if (is_array($emailErrors))
-                            @foreach ($emailErrors as $msg)
-                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                            @endforeach
-                        @else
-                            <div class="text-sunset-orange error-messages">{{$emailErrors}}</div>
-                        @endif
-                    @endforeach
-                @endif -->
             </div>
         </div>
 
@@ -84,17 +44,6 @@
             <div class="col-sm-10">
                 <input type="password" id="password" name="password" class="form-control" autocomplete="off">
                 <div id="password-validate" class="text-sunset-orange"></div>
-                <!-- @if ($errors->has('password'))
-                    @foreach ($errors->get('password') as $passwordErrors)
-                        @if (is_array($passwordErrors))
-                            @foreach ($passwordErrors as $msg)
-                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                            @endforeach
-                        @else
-                            <div class="text-sunset-orange error-messages">{{$passwordErrors}}</div>
-                        @endif
-                    @endforeach
-                @endif -->
             </div>
         </div>
 
@@ -104,31 +53,19 @@
             <div class="col-sm-10">
                 <input type="password" id="confirm_password" name="confirm_password" class="form-control" autocomplete="off">
                 <div id="confirm_password-validate" class="text-sunset-orange"></div>
-                <!-- @if ($errors->has('confirm_password'))
-                    @foreach ($errors->get('confirm_password') as $confirmPasswordErrors)
-                        @if (is_array($confirmPasswordErrors))
-                            @foreach ($confirmPasswordErrors as $msg)
-                                <div class="text-sunset-orange error-messages">{{$msg}}</div>
-                            @endforeach
-                        @else
-                            <div class="text-sunset-orange error-messages">{{$confirmPasswordErrors}}</div>
-                        @endif
-                    @endforeach
-                @endif -->
             </div>
         </div>
-
         <div class="d-flex gap-2 justify-content-center">
-            <a href="{{route('manager.list')}}" type="button" class="btn btn-lavender d-flex align-items-center">
+            <a id="btn_cancel" href="{{route('manager.list')}}" type="button" class="btn btn-lavender d-flex align-items-center">
                 <span class="me-2 fs-7 d-inline-flex justify-content-center align-items-center">
-                    <i class="fa-solid fa-pen p-0 m-0"></i>
+                    <i class="fa-solid fa-circle-chevron-left"></i>
                 </span>
                 <span>＜戻る</span>
             </a>
-            <button type="submit" class="btn btn-royal-blue d-flex align-items-center">
+            <button id="btn_submit" type="submit" class="btn btn-royal-blue d-flex align-items-center">
                 <span>登録</span>
-                <span class="ms-2 fs-7 d-inline-flex justify-content-center align-items-center">
-                    <i class="fa-solid fa-trash p-0 m-0"></i>
+                <span class="ms-2 square-8 rounded-circle bg-white fs-9 text-royal-blue d-inline-flex justify-content-center align-items-center">
+                    <i class="fa-solid fa-plus p-0 m-0"></i>
                 </span>
             </button>
         </div>
@@ -137,26 +74,61 @@
 
 <script>
     $(document).ready(() => {
+        $('input').on('input', (event) => {
+            const inputId = event.target.id;
+            if (inputId) {
+                $(`#${inputId}-validate`).html("");
+            }
+        });
+
+        $('select').on('change', (event) => {
+            const selectId = event.target.id;
+            if (selectId) {
+                $(`#${selectId}-validate`).html("");
+            }
+        });
+
         $('#managerForm').on('submit', (event) => {
-            console.log("Submitted")
             event.preventDefault();
             clearValidate();
+            disabledFormBtns()
             const formFields = getFormFields();
             $.ajax({
                 type: 'POST',
                 url: '{{route("manager.registerAPI")}}',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 data: {
                     "_token": "{{ csrf_token() }}",
                     ...formFields,
                 },
                 success: (response) => {
-                    console.log(response);
+                    if (response == "200") {
+                        $.toast({
+                            heading: '成功',
+                            text: 'マネージャー登録が成功しました',
+                            icon: 'success',
+                            position: 'top-right'
+                        })
+                        clearValidate();
+                        clearForm();
+                        enableFormBtns();
+                    }
                 },
                 error: (xhr) => {
                     const errors = JSON.parse(xhr.responseText);
-                    console.log(errors);
-                    showValidateError(errors);
+                    if (xhr.status == 422) {
+                        showValidateError(errors);
+                    } else {
+                        $.toast({
+                            heading: '失敗',
+                            text: errors,
+                            icon: 'warning',
+                            position: 'top-right'
+                        });
+                    }
+                    enableFormBtns();
                 }
             });
         });
@@ -174,20 +146,46 @@
             "name": name,
             "email": email,
             "password": password,
-            "confirm_password":confirm_password,
+            "confirm_password": confirm_password,
         }
-        
+
         return formFields;
     }
 
+    function disabledFormBtns() {
+        $('#btn_submit').addClass('disabled');
+        $('#btn_cancel').addClass('disabled');
+    }
+
+    function enableFormBtns() {
+        $('#btn_submit').removeClass('disabled');
+        $('#btn_cancel').removeClass('disabled');
+    }
+
+    function clearForm() {
+        $('#subscription_user').val('');
+        $('#name').val('');
+        $('#email').val('');
+        $('#password').val('');
+        $('#confirm_password').val('');
+    }
+
+
+
     function showValidateError(errors) {
         Object.keys(errors).forEach((key) => {
-            console.log(`#${key}-validate`);
-            if(errors[key].length != 0) {
-                return;
-            }
-            $(`#${key}-validate`).text(errors[key]);
-        })
+            let errHtml = '';
+            errors[key].forEach((error) => {
+                if (typeof error === "object") {
+                    Object.values(error).forEach((nestedError) => {
+                        errHtml += `<span>${nestedError}</span><br>`;
+                    });
+                } else {
+                    errHtml += `<span>${error}</span><br>`;
+                }
+            });
+            $(`#${key}-validate`).html(errHtml);
+        });
     }
 
     function clearValidate() {
