@@ -1,6 +1,7 @@
 @extends('layouts.auth_layout')
 
 @section('content')
+<script src="{{ asset('/assets/js/jquery-3.6.0.min.js')}}"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class=" col-sm-8 col-md-6">
@@ -24,9 +25,9 @@
                                     value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -36,14 +37,19 @@
                                     class="text-danger">*</span></label>
 
                             <div class="">
-                                <input id="password" type="password" placeholder="パスワードを入力してください"
-                                    class="form-control @error('password') is-invalid @enderror" name="password"
-                                    required autocomplete="current-password">
+                                <div class="position-relative">
+                                    <input id="password" type="password" placeholder="パスワードを入力してください"
+                                        class="form-control @error('password') is-invalid @enderror" name="password"
+                                        required autocomplete="current-password">
+                                    <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
+                                        <i class="fa-regular fa-eye-slash" id="toggle_password"></i>
+                                    </span>
+                                </div>
 
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -66,9 +72,9 @@
                         <div class="mb-0">
                             <div class="d-flex justify-content-center">
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    {{ __('Forgot Your Password?') }}
+                                </a>
                                 @endif
                             </div>
                         </div>
@@ -78,4 +84,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#toggle_password').on('click', (event) => {
+        const togglePassword = $(event.target);
+        const passwordInput = $('#password');
+        const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+
+        passwordInput.attr('type', type);
+        togglePassword.toggleClass('fa-eye').toggleClass('fa-eye-slash');
+    });
+</script>
 @endsection

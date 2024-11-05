@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Common\FormValidationException;
 use App\Http\Requests\RegisterManagerForm;
+use App\Http\Requests\UpdateManagerForm;
 use Illuminate\Http\Response;
 
 class ManagerController extends Controller
@@ -135,6 +136,39 @@ class ManagerController extends Controller
         ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $formData = $request->only('subscription_user', 'name', 'password', 'confirm_password', 'chk_change_password');
+        try {
+            $adminUser = AdminUser::findOrFail($id);
+            if (!empty($formData['chk_change_password']) && $formData['chk_change_password'] === 'true') {
+                $validator = app(UpdateManagerForm::class);
+                $validator->validate($formData);
+
+                $adminUser->update([
+                    'subscription_user_id' => intval($formData['subscription_user']),
+                    'name' => $formData['name'],
+                    'password' => bcrypt($formData['password']),
+                ]);
+
+                return response()->json(Response::HTTP_OK);
+            }
+            if ($formData['name'] == null) {
+                return response()->json(['name' => ['必須フィールドに入力してください']], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $adminUser->update([
+                'subscription_user_id' => intval($formData['subscription_user']),
+                'name' => $formData['name'],
+            ]);
+
+            return response()->json(Response::HTTP_OK);
+        } catch (FormValidationException $e) {
+            return response()->json($e->getErrors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+    }
+
+
     // GET Manager LIST
     public function getManagers()
     {
@@ -146,8 +180,22 @@ class ManagerController extends Controller
             'admin_users.updated_at',
             'subscription_users.company_name'
         ])
-            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id');
+            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
+            ->where('delete_flag', 0);
 
         return DataTables::of($managers)->make(true);
+    }
+
+    //DELETE Manager
+    public function delete($id)
+    {
+        $manager = AdminUser::find($id);
+        if ($manager) {
+            $manager->delete_flag = 1;
+            $manager->save();
+            return response()->json('正常に削除されました', 200);
+        } else {
+            return response()->json('ユーザーが見つかりません', 404);
+        }
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\HomeController;
 
+
 Auth::routes();
 
 Route::get("/", function () {
@@ -15,4 +16,6 @@ Route::get('/manager/register', [ManagerController::class, 'register'])->name('m
 Route::post('/manager/registerAPI', [ManagerController::class, 'registerAPI'])->name('manager.registerAPI');
 Route::post('/manager/store', [ManagerController::class, 'store'])->name('manager.store');
 Route::get('/manager/edit/{id}', [ManagerController::class, 'edit'])->name('manager.edit');
+Route::patch('/manager/update/{id}', [ManagerController::class, 'update'])->name('manager.update');
+Route::delete('/manager/delete/{id}', [ManagerController::class, 'delete'])->name('manager.delete');
 Route::get('/manager/get-managers', [ManagerController::class, 'getManagers'])->name('manager.get-managers');

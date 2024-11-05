@@ -57,52 +57,52 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                        @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
+                        @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                        @endif
                         @else
-                            <li class="nav-item dropdown d-none d-sm-flex bg-light px-3 py-4">
-                                <div id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="fs-1">
-                                            <img class="rounded-circle" src="{{url('/assets/images/default-user.png')}}"
-                                                alt="user-img" style="width: 45px">
+                        <li class="nav-item dropdown d-none d-sm-flex bg-light px-3 py-4">
+                            <div id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" v-pre>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-1">
+                                        <img class="rounded-circle" src="{{url('/assets/images/default-user.png')}}"
+                                            alt="user-img" style="width: 45px">
+                                    </span>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-muted fw-light" style="font-size: .67rem">ようこそ</span>
+                                        <span class="nav-link px-0 fw-bold fs-5">
+                                            {{ Auth::user()->name }} ユーザー
                                         </span>
-                                        <div class="d-flex flex-column">
-                                            <span class="text-muted fw-light" style="font-size: .67rem">ようこそ</span>
-                                            <span class="nav-link px-0 fw-bold fs-5">
-                                                {{ Auth::user()->name }} ユーザー
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fa-solid fa-user-pen pe-1"></i>
-                                            {{ __('プロフィール編集') }}
-                                        </a>
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form-desktop').submit();">
-                                            <i class="fa-solid fa-arrow-right-from-bracket pe-1"></i>
-                                            {{ __('ログアウト') }}
-                                        </a>
-
-                                        <form id="logout-form-desktop" action="{{ route('logout') }}" method="POST"
-                                            class="d-none">
-                                            @csrf
-                                        </form>
                                     </div>
                                 </div>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-user-pen pe-1"></i>
+                                        {{ __('プロフィール編集') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form-desktop').submit();">
+                                        <i class="fa-solid fa-arrow-right-from-bracket pe-1"></i>
+                                        {{ __('ログアウト') }}
+                                    </a>
 
-                            </li>
+                                    <form id="logout-form-desktop" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
+
+                        </li>
                         @endguest
                     </ul>
                 </div>

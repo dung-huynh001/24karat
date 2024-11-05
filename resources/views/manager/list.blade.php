@@ -46,15 +46,35 @@
         });
 
         $('#btn_delete_confirm').on('click', function(event) {
-            const urls = `manage/delete/${deleteId}`;
+            const urlDelete = `delete/${deleteId}`;
             $.ajax({
-                url: '{{url()}}',
+                url: urlDelete,
                 type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
                 success: function(res) {
-
+                    $('#deleteModal').modal('hide');
+                    $('#managerTbl').DataTable().ajax.reload();
+                    $.toast({
+                        heading: '成功',
+                        text: '正常に削除されました',
+                        icon: 'success',
+                        position: 'top-right'
+                    })
                 },
                 error: function(xhr) {
-
+                    const errmsg = xhr.responseText;
+                    $.toast({
+                        heading: 'エラー',
+                        text: errmsg,
+                        icon: 'error',
+                        position: 'top-right'
+                    })
+                    $('#deleteModal').modal('hide');
                 }
             });
         });
