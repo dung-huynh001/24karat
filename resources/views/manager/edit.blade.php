@@ -54,14 +54,24 @@
         <div class="mb-3 row">
             <label for="newPassword" class="col-sm-2 col-form-label">新しいパスワード </label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" id="password" name="password" disabled>
+                <div class="position-relative">
+                    <input type="password" class="form-control" id="password" name="password" disabled>
+                    <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
+                        <i class="fa-regular fa-eye-slash" id="toggle_password"></i>
+                    </span>
+                </div>
                 <div id="password-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-3 row">
             <label for="confirmPassword" class="col-sm-2 col-form-label">パスワード（確認）</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" id="confirm_password" name="confirm_password" disabled>
+                <div class="position-relative">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" disabled>
+                    <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
+                        <i class="fa-regular fa-eye-slash" id="toggle_confirm_password"></i>
+                    </span>
+                </div>
                 <div id="confirm_password-validate" class="text-sunset-orange"></div>
             </div>
         </div>
@@ -111,6 +121,24 @@
                 newPasswordInput.attr('disabled', true);
                 confirmPasswordInput.attr('disabled', true);
             };
+        });
+
+        $('#toggle_password').on('click', (event) => {
+            const togglePassword = $(event.target);
+            const passwordInput = $('#password');
+            const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+
+            passwordInput.attr('type', type);
+            togglePassword.toggleClass('fa-eye').toggleClass('fa-eye-slash');
+        });
+
+        $('#toggle_confirm_password').on('click', (event) => {
+            const togglePassword = $(event.target);
+            const passwordInput = $('#confirm_password');
+            const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+
+            passwordInput.attr('type', type);
+            togglePassword.toggleClass('fa-eye').toggleClass('fa-eye-slash');
         });
 
         $('#managerForm').on('submit', (event) => {
