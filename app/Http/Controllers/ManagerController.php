@@ -158,7 +158,7 @@ class ManagerController extends Controller
             }
 
             $adminUser->update([
-                'subscription_user_id' => intval($formData['subscription_user']),
+                'subscription_user_id' => $formData['subscription_user'] == null ? null : intval($formData['subscription_user']),
                 'name' => $formData['name'],
             ]);
 

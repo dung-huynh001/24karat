@@ -4,6 +4,7 @@
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/datatables.min.css') }}">
 
+
 <div class="mb-4">
     <a role="button" href="{{route("manager.register")}}" class="btn btn-royal-blue">管理者登録</a>
 </div>
@@ -39,6 +40,8 @@
 <script>
     let deleteId;
     $(document).ready(function() {
+        $.fn.dataTable.ext.errMode = 'none';
+
         $(document).on('click', '.btn_delete', function(event) {
             const btnId = $(this).data('id');
             deleteId = btnId;
@@ -91,7 +94,9 @@
                 sInfoEmpty: " 0 件中 0 から 0 まで表示",
                 sInfoFiltered: "（全 _MAX_ 件より抽出）",
                 sInfoPostFix: "",
-                sSearch: "検索:",
+                // sSearch: "検索:",
+                sSearch: "検索",
+                sSearchPlaceholder: `フリーワードを入力してください`,
                 sUrl: "",
                 oPaginate: {
                     "sFirst": "先頭",
@@ -99,6 +104,12 @@
                     "sNext": "次",
                     "sLast": "最終"
                 }
+            },
+            layout: {
+                topStart: 'search',
+                topEnd: ['info', 'pageLength'],
+                bottomEnd: 'paging',
+                bottomStart: '',
             },
             ajax: "{{ url('manager/get-managers') }}",
             columns: [{

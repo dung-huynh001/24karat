@@ -24,12 +24,13 @@
     <!-- Vite Scripts -->
     @vite(['resources/js/app.js'])
 
-    <!-- Build/Assets/SCSS -->
-    <link rel="stylesheet" href="{{asset("/assets/scss/app.scss")}}">
 
     <!-- Build/Assets/JS -->
     <script src="{{asset("/assets/js/app.js")}}"></script>
     <script src="{{asset("/assets/lib/jquery-toast/jquery.toast.js")}}"></script>
+
+    <!-- Build/Assets/SCSS -->
+    <link href="{{asset('/assets/css/app.css')}}" rel="stylesheet">
 </head>
 
 <body>
