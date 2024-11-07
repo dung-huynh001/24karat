@@ -11,7 +11,6 @@
 
 @import "jquery-toast-plugin/src/jquery.toast.css";
 
-
 // @import "toastify-js/src/toastify.css";
 
 /* Colors Variables */
@@ -194,20 +193,52 @@ body {
 }
 
 /* Custom DataTables */
-table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+table.dataTable
+    thead
+    > tr
+    > th:not(:first-child).dt-orderable-desc
+    span.dt-column-order:after,
+table.dataTable
+    thead
+    > tr
+    > th:not(:first-child).dt-ordering-desc
+    span.dt-column-order:after,
+table.dataTable
+    thead
+    > tr
+    > td:not(:first-child).dt-orderable-desc
+    span.dt-column-order:after,
+table.dataTable
+    thead
+    > tr
+    > td:not(:first-child).dt-ordering-desc
+    span.dt-column-order:after {
     bottom: 20% !important;
     left: 65% !important;
     content: "↓" !important;
     content: "↓" / "" !important;
 }
 
-table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
-table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
+table.dataTable
+    thead
+    > tr
+    > th:not(:first-child).dt-orderable-asc
+    span.dt-column-order:before,
+table.dataTable
+    thead
+    > tr
+    > th:not(:first-child).dt-ordering-asc
+    span.dt-column-order:before,
+table.dataTable
+    thead
+    > tr
+    > td:not(:first-child).dt-orderable-asc
+    span.dt-column-order:before,
+table.dataTable
+    thead
+    > tr
+    > td:not(:first-child).dt-ordering-asc
+    span.dt-column-order:before {
     top: 20% !important;
     content: "↑" !important;
     content: "↑" / "" !important;
@@ -225,28 +256,6 @@ table.dataTable tbody tr {
 
 table.dataTable tbody tr:hover {
     box-shadow: 1px 2px #e6e6e6;
-}
-
-table.dataTable tbody tr:hover td .dt-actions {
-    display: block;
-}
-
-// div.dt-container .dt-search {
-//     display: flex;
-//     flex-direction: row-reverse;
-//     align-items: center;
-//     columns: 10px;
-// }
-
-
-.dt-actions {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 3px 16px;
-    background-color: #f6f6f6;
 }
 
 select:invalid {

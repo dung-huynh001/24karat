@@ -3,17 +3,20 @@
 @section('content')
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/datatables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/responsive.dataTables.min.css') }}">
 
 
 <div class="mb-4">
     <a role="button" href="{{route("manager.register")}}" class="btn btn-royal-blue">管理者登録</a>
 </div>
 
-<table id="managerTbl" class="display">
-    <thead>
-        <tr></tr>
-    </thead>
-</table>
+<div class="table-responsive">
+    <table id="managerTbl" class="display responsive ">
+        <thead>
+            <tr></tr>
+        </thead>
+    </table>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -36,6 +39,10 @@
 
 <!-- DataTables JS -->
 <script src="{{ asset('/assets/lib/datatables/js/datatables.min.js') }}"></script>
+<script src="{{ asset('/assets/lib/datatables/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('/assets/lib/datatables/js/responsive.dataTables.min.js') }}"></script>
+<script src="{{ asset('/assets/lib/datatables/js/dataTables.fixedHeader.min.js') }}"></script>
+<script src="{{ asset('/assets/lib/datatables/js/fixedHeader.dataTables.min.js') }}"></script>
 
 <script>
     let deleteId;
@@ -113,6 +120,11 @@
             search: {
                 return: true,
             },
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            responsive: true,
             orderClasses: ['sorting_disabled', 'sorting', 'sorting_asc_custom', 'sorting_desc_custom'],
             language: {
                 sLengthMenu: "_MENU_",
@@ -138,8 +150,20 @@
                 bottomEnd: 'paging',
                 bottomStart: '',
             },
+            columnDefs: [{
+                className: 'dtr-control',
+                orderable: false,
+                targets: 0,
+                width: '8px',
+            }],
+            order: [1, 'asc'],
             ajax: "{{ url('manager/get-managers') }}",
             columns: [{
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 0
+                },
+                {
                     title: 'No.',
                     data: 'admin_user_id',
                     name: 'admin_user_id'

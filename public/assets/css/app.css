@@ -3,11 +3,6 @@ div.dt-container .dt-search {
     flex-direction: row-reverse;
     align-items: center;
     width: 100%;
-    /* column-gap: 10px; */
-}
-
-div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
-    width: 40%;
 }
 
 div.dt-container .dt-search label {
@@ -35,4 +30,53 @@ div.dt-container .dt-search .dt-input {
     border-top-left-radius: 0.3rem;
     border-bottom-left-radius: 0.3rem;
     flex-grow: 1;
+}
+
+.dt-actions {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 3px 16px;
+    background-color: #f6f6f6;
+}
+table.fixedHeader-floating,
+table.fixedHeader-locked {
+    position: relative !important;
+    background-color: var(--dt-html-background);
+    background-color: var(--dt-html-background);
+}
+
+@media print {
+    table.fixedHeader-floating {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    div.dt-container div.dt-layout-row div.dt-layout-cell.dt-layout-start {
+        width: 40%;
+    }
+
+    table.dataTable tbody tr:hover td .dt-actions {
+        display: block;
+    }
+
+    .dt-actions {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 3px 16px;
+        background-color: #f6f6f6;
+    }
+}
+
+@media (max-width: 767px) {
+    .dt-actions {
+        padding: 3px 8px;
+        background-color: transparent;
+    }
 }

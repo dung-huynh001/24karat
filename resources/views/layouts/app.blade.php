@@ -166,7 +166,7 @@
                 </div>
             </div>
         </main>
-        <footer class="position-fixed bottom-0 w-100 bg-white">
+        <footer class="position-sm-fixed bottom-0 w-100 bg-white">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center py-3">
                     <div>&copy;2024</div>
