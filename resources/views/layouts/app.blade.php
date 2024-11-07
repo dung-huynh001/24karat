@@ -169,8 +169,8 @@
         <footer class="position-fixed bottom-0 w-100 bg-white">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center py-3">
-                    <div>2024 &copy; CUSC</div>
-                    <div>Powered by CUSC - ITO</div>
+                    <div>&copy;2024</div>
+                    <div></div>
                 </div>
             </div>
         </footer>
