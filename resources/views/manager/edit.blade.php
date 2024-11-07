@@ -160,12 +160,14 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        $.toast({
-                            heading: '成功',
-                            text: '正常に更新されました',
-                            icon: 'success',
-                            position: 'top-right'
-                        })
+                        localStorage.setItem('edit-success', 'true');
+                        // $.toast({
+                        //     heading: '成功',
+                        //     text: '正常に更新されました',
+                        //     icon: 'success',
+                        //     position: 'top-right'
+                        // })
+                        window.location.assign('/manager/list');
                         clearValidate();
                         enableFormBtns();
                     }

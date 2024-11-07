@@ -42,11 +42,34 @@
     $(document).ready(function() {
         $.fn.dataTable.ext.errMode = 'none';
 
+        if (localStorage.getItem('edit-success')) {
+            $.toast({
+                heading: '成功',
+                text: '正常に更新されました',
+                icon: 'success',
+                position: 'top-right'
+            })
+
+            localStorage.removeItem('edit-success');
+        }
+
+        if (localStorage.getItem('register-success')) {
+            $.toast({
+                heading: '成功',
+                text: 'マネージャー登録が成功しました',
+                icon: 'success',
+                position: 'top-right'
+            })
+
+            localStorage.removeItem('register-success');
+        }
+
         $(document).on('click', '.btn_delete', function(event) {
             const btnId = $(this).data('id');
             deleteId = btnId;
             console.log(`Id bị xóa là: ${deleteId}`);
         });
+
 
         $('#btn_delete_confirm').on('click', function(event) {
             const urlDelete = `delete/${deleteId}`;
@@ -82,9 +105,14 @@
             });
         });
 
-        $('#managerTbl').DataTable({
+
+
+        const table = $('#managerTbl').DataTable({
             processing: true,
             serverSide: true,
+            search: {
+                return: true,
+            },
             orderClasses: ['sorting_disabled', 'sorting', 'sorting_asc_custom', 'sorting_desc_custom'],
             language: {
                 sLengthMenu: "_MENU_",
@@ -94,7 +122,6 @@
                 sInfoEmpty: " 0 件中 0 から 0 まで表示",
                 sInfoFiltered: "（全 _MAX_ 件より抽出）",
                 sInfoPostFix: "",
-                // sSearch: "検索:",
                 sSearch: "検索",
                 sSearchPlaceholder: `フリーワードを入力してください`,
                 sUrl: "",
@@ -184,7 +211,10 @@
             ]
         });
 
-
+        $('.dt-search>label').on('click', (event) => {
+            const keyword = $('#dt-search-0').val();
+            table.search(keyword).draw();
+        });
     });
 </script>
 @endsection

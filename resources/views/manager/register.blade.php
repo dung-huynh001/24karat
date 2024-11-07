@@ -133,12 +133,13 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        $.toast({
-                            heading: '成功',
-                            text: 'マネージャー登録が成功しました',
-                            icon: 'success',
-                            position: 'top-right'
-                        })
+                        // $.toast({
+                        //     heading: '成功',
+                        //     text: 'マネージャー登録が成功しました',
+                        //     icon: 'success',
+                        //     position: 'top-right'
+                        // })
+                        window.location.assign('/manager/list');
                         clearValidate();
                         clearForm();
                         enableFormBtns();
