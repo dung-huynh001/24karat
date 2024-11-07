@@ -181,10 +181,15 @@ class ManagerController extends Controller
             'subscription_users.company_name'
         ])
             ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
-            ->where('delete_flag', 0);
+            ->where('admin_users.delete_flag', 0);
 
-        return DataTables::of($managers)->make(true);
+        return DataTables::of($managers)
+            ->filterColumn('company_name', function ($query, $keyword) {
+                $query->whereRaw('LOWER(subscription_users.company_name) LIKE ?', ["%{$keyword}%"]);
+            })
+            ->make(true);
     }
+
 
     //DELETE Manager
     public function delete($id)
