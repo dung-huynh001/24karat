@@ -32,3 +32,9 @@ $.extend($.validator.messages, {
     minlength: "パスワード（確認）の文字数は、8文字以上である必要があります。",
     equalTo: "パスワード（確認）と新しいパスワードが一致しません。",
 });
+
+/* Input Typing */
+function typingNumber(event) {
+    let charCode = event.which ? event.which : event.keyCode;
+    return charCode >= 48 && charCode <= 57;
+}

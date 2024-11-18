@@ -7,11 +7,11 @@
 
 
 <div class="mb-4">
-    <a role="button" href="{{route("manager.register")}}" class="btn btn-royal-blue">管理者登録</a>
+    <a role="button" href="{{route("subscription_user.add")}}" class="btn btn-royal-blue">契約ユーザー登録</a>
 </div>
 
 <div class="table-responsive">
-    <table id="managerTbl" class="display responsive ">
+    <table id="subscriptionUserTbl" class="display responsive">
         <thead>
             <tr></tr>
         </thead>
@@ -92,7 +92,7 @@
                 },
                 success: function(res) {
                     $('#deleteModal').modal('hide');
-                    $('#managerTbl').DataTable().ajax.reload();
+                    $('#subscriptionUserTbl').DataTable().ajax.reload();
                     $.toast({
                         heading: '成功',
                         text: '正常に削除されました',
@@ -115,7 +115,7 @@
 
 
 
-        const table = $('#managerTbl').DataTable({
+        const table = $('#subscriptionUserTbl').DataTable({
             processing: true,
             serverSide: true,
             colReorder: true,
@@ -153,13 +153,30 @@
                 bottomStart: '',
             },
             columnDefs: [{
-                className: 'dtr-control',
-                orderable: false,
-                targets: 0,
-                width: '8px',
-            }],
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 0,
+                    width: '8px',
+                },
+                {
+                    responsivePriority: 1,
+                    targets: 0
+                },
+                {
+                    responsivePriority: 2,
+                    targets: 1
+                },
+                {
+                    responsivePriority: 3,
+                    targets: 2
+                },
+                {
+                    responsivePriority: 4,
+                    targets: '_all'
+                }
+            ],
             order: [1, 'asc'],
-            ajax: "{{ url('manager/get-managers') }}",
+            ajax: "{{ url('/subscription_user/get-subscription_users') }}",
             columns: [{
                     className: 'dtr-control',
                     orderable: false,
@@ -167,23 +184,48 @@
                 },
                 {
                     title: 'No.',
-                    data: 'admin_user_id',
-                    name: 'admin_user_id'
+                    data: 'subscription_user_id',
+                    name: 'subscription_user_id'
                 },
                 {
-                    title: '名前',
-                    data: 'name',
-                    name: 'name'
+                    title: 'サブドメイン',
+                    data: 'sub_domain',
+                    name: 'sub_domain'
                 },
                 {
-                    title: 'メールアドレス',
-                    data: 'email',
-                    name: 'email'
+                    title: 'バーコード種類',
+                    data: 'barcode_type',
+                    name: 'barcode_type'
                 },
                 {
                     title: '契約ユーザー',
                     data: 'company_name',
                     name: 'company_name'
+                },
+                {
+                    title: '郵便番号',
+                    data: 'zip',
+                    name: 'zip'
+                },
+                {
+                    title: '住所1',
+                    data: 'address1',
+                    name: 'address1'
+                },
+                {
+                    title: '住所2',
+                    data: 'address2',
+                    name: 'address2'
+                },
+                {
+                    title: '電話番号',
+                    data: 'tel',
+                    name: 'tel'
+                },
+                {
+                    title: '担当者メールアドレス',
+                    data: 'manager_mail',
+                    name: 'manager_mail'
                 },
                 {
                     title: '作成日',
@@ -211,13 +253,13 @@
                     // title: '操作',
                     // visible: false,
                     orderable: false,
-                    data: 'admin_user_id',
-                    name: 'admin_user_id',
+                    data: 'subscription_user_id',
+                    name: 'subscription_user_id',
                     render: function(data, type, row) {
                         var actions =
                             `<div class="dt-actions">
                                 <div class="d-flex gap-2">
-                                    <a href="/manager/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
+                                    <a href="/subscription_user/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
                                         <span>編集</span>
                                         <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-emerald d-inline-flex justify-content-center align-items-center">
                                             <i class="fa-solid fa-pen p-0 m-0"></i>

@@ -37,6 +37,8 @@
 
     --gray-out-1: #999;
     --bg-gray-1: #f7f7f7;
+
+    --bg-pewter-blue: #8ca5b4;
 }
 
 body {
@@ -127,6 +129,11 @@ body {
     --bs-btn-disabled-color: #666;
     --bs-btn-disabled-bg: var(--sunset-orange);
     --bs-btn-disabled-border-color: var(--sunset-orange);
+}
+
+/* Background Colors*/
+.bg-pewter-blue {
+    background-color: var(--bg-pewter-blue);
 }
 
 /* Custom Texts */

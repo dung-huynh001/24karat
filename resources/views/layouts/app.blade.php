@@ -38,8 +38,6 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm p-0 m-0">
             <div class="container">
                 <a class="navbar-brand d-flex flex-column align-items-end" href="{{ url('/') }}">
-                    <!-- <img src="{{ url('/assets/images/logo.webp') }}" alt="logo img"
-                        style="width: 160px; height: 60px; object-fit: cover;"> -->
                     <img src="{{ asset('/assets/images/logo.webp') }}" alt="logo img"
                         style="width: 160px; height: 60px; object-fit: cover;">
                     <span class="d-flex justify-content-center align-items-center gap-1">
@@ -111,10 +109,10 @@
         </nav>
         <!-- Mobile Menu -->
         <div class="collapse navbar-collapse align-self-end" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto gap-4 p-3">
-                <li><a class="nav-link text-decoration-none text-muted" href="{{route('manager.list')}}">管理者</a></li>
-                <li><a class="nav-link text-decoration-none text-muted" href="#">契約ユーザー</a></li>
-                <li><a class="nav-link text-decoration-none text-muted" href="">フィールド管理</a></li>
+            <ul class="navbar-nav me-auto gap-4 p-3 nav-list">
+                <li><a class="nav-link {{request()->is('manager/*') ? 'active' : ''}}" href="{{route('manager.list')}}">管理者</a></li>
+                <li><a class="nav-link {{request()->is('subscription_user/*') ? 'active' : ''}}" href="{{route('subscription_user.list')}}">契約ユーザー</a></li>
+                <li><a class="nav-link" href="">フィールド管理</a></li>
                 <li>
                     <a class="btn btn-danger w-100" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">
@@ -130,23 +128,23 @@
         <!-- End Mobile Menu-->
 
         <!-- Desktop Menu -->
-        <div class="d-none d-md-block" style="background-color: #8ca5b4">
+        <div class="d-none d-md-block bg-pewter-blue">
             <div class="container">
-                <ul class="d-flex gap-4 p-3 text-white" style="list-style-type: none">
+                <ul class="d-flex gap-4 p-3 text-white nav-list">
                     <li>
-                        <a class="nav-link text-decoration-none" href="{{route('manager.list')}}">
+                        <a class="nav-link {{request()->is('manager/*') ? 'active' : ''}}" href="{{route('manager.list')}}">
                             <i class="fa-solid fa-user-group fs-8"></i>
                             <span>管理者</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link text-decoration-none" style="opacity: .5" href="">
+                        <a class="nav-link {{request()->is('subscription_user/*') ? 'active' : ''}}" href="{{route('subscription_user.list')}}">
                             <i class="fa-solid fa-users fs-8"></i>
                             <span>契約ユーザー</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link text-decoration-none" style="opacity: .5" href=""><i
+                        <a class="nav-link" href="{{route('manager.list')}}"><i
                                 class="fa-solid fa-table-list fs-8"></i>
                             <span>フィールド管理</span>
                         </a>
