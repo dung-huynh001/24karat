@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @extends('layouts.breadcrumb')
 @section('content')
+<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2-bootstrap-5-theme.min.css') }}">
 <div class="container-fluid">
     <form id="managerForm" method="PATCH" class="py-3">
         {{csrf_field()}}
@@ -91,9 +93,14 @@
         </div>
     </form>
 </div>
-
+<script src="{{ asset('/assets/lib/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('/assets/lib/select2/js/bootstrap.bundle.min.js') }}"></script>
 <script>
     $(document).ready(() => {
+        $('select').select2({
+            theme: 'bootstrap-5'
+        });
+
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {

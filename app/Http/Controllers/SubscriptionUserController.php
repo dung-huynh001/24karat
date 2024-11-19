@@ -10,8 +10,12 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Common\FormValidationException;
 use App\Http\Requests\RegisterManagerForm;
 use App\Http\Requests\UpdateManagerForm;
-// use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Common;
+use App\Http\Common\Constants;
+use App\Http\Requests\UpdateSubscriptionUserForm;
+use App\Models\PostCodes;
+use App\Models\Prefectures;
 
 class SubscriptionUserController extends Controller
 {
@@ -51,54 +55,42 @@ class SubscriptionUserController extends Controller
             ['title' => '契約ユーザー', 'url' => '/subscription_user/list', 'active' => false],
             ['title' => '契約ユーザー登録', 'url' => '/subscription_user/add', 'active' => true],
         ];
-        $subscriptionUsers = SubscriptionUser::select([
-            'subscription_users.subscription_user_id',
-            'subscription_users.company_name'
+
+        $barcodeOptions = Constants::BARCODE_OPTIONS;
+
+        $prefectures = Prefectures::select([
+            'id',
+            'code',
+            'name',
         ])->get();
-        return view('subscription_user.add', compact('breadcrumbs', 'subscriptionUsers'));
-    }
 
-    //Register Manager POST
-    public function store()
-    {
-        $formData = request()->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
-        try {
-            $validator = app(RegisterManagerForm::class);
-            $validator->validate($formData);
-
-            AdminUser::create([
-                'subscription_user_id' => intval($formData['subscription_user']),
-                'name' => $formData['name'],
-                'email' => $formData['email'],
-                'password' => bcrypt($formData['password']),
-            ]);
-            return Redirect::route('manager.list')->with('success', '管理者登録が成功しました');
-        } catch (FormValidationException $e) {
-            return Redirect::back()->withInput()->withErrors($e->getErrors());
-        }
+        return view('subscription_user.add', [
+            'breadcrumbs' => $breadcrumbs,
+            'barcodeOptions' => $barcodeOptions,
+            'prefectures' => $prefectures
+        ]);
     }
 
     public function create(Request $request)
     {
-        $formData = $request->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
-
+        $formData = $request
+            ->only('company_name', 'sub_domain', 'barcode_type', 'pref_id', 'zip', 'address1', 'address2', 'tel', 'manager_mail');
         try {
-            $validator = app(RegisterManagerForm::class);
+            $validator = app(UpdateSubscriptionUserForm::class);
             $validator->validate($formData);
 
-            if (AdminUser::where('email', $formData['email'])->exists()) {
-                return response()->json(
-                    '電子メールが使用されました',
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            AdminUser::create([
-                'subscription_user_id' => intval($formData['subscription_user']),
-                'name' => $formData['name'],
-                'email' => $formData['email'],
-                'password' => bcrypt($formData['password']),
+            SubscriptionUser::create([
+                'company_name' => $formData['company_name'],
+                'sub_domain' => $formData['sub_domain'],
+                'barcode_type' => $formData['barcode_type'],
+                'pref_id' => $formData['pref_id'],
+                'zip' => $formData['zip'],
+                'address1' => $formData['address1'],
+                'address2' => $formData['address2'],
+                'tel' => $formData['tel'],
+                'manager_mail' => $formData['manager_mail'],
             ]);
+
             return response()->json(Response::HTTP_OK);
         } catch (FormValidationException $e) {
             return response()->json($e->getErrors(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -113,18 +105,7 @@ class SubscriptionUserController extends Controller
             ['title' => '契約ユーザー', 'url' => '/subscription_user/list', 'active' => false],
             ['title' => '契約ユーザー編集', 'url' => "/subscription_user/edit/$id", 'active' => true],
         ];
-        $manager = AdminUser::select([
-            'admin_users.admin_user_id',
-            'admin_users.name',
-            'admin_users.email',
-            'admin_users.created_at',
-            'admin_users.updated_at',
-            'subscription_users.subscription_user_id',
-            'subscription_users.company_name'
-        ])
-            ->where('admin_users.admin_user_id', $id)
-            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
-            ->first();
+
         $subscriptionUser = SubscriptionUser::select([
             'subscription_user_id',
             'company_name',
@@ -139,37 +120,42 @@ class SubscriptionUserController extends Controller
         ])
             ->where('subscription_user_id', $id)
             ->first();
+
+        $barcodeOptions = Constants::BARCODE_OPTIONS;
+
+        $prefectures = Prefectures::select([
+            'id',
+            'code',
+            'name',
+        ])->get();
+
         return view('subscription_user.edit', [
             'breadcrumbs' => $breadcrumbs,
-            'manager' => $manager,
             'subscriptionUser' => $subscriptionUser,
+            'barcodeOptions' => $barcodeOptions,
+            'prefectures' => $prefectures
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $formData = $request->only('subscription_user', 'name', 'password', 'confirm_password', 'chk_change_password');
+        $formData = $request
+            ->only('company_name', 'sub_domain', 'barcode_type', 'pref_id', 'zip', 'address1', 'address2', 'tel', 'manager_mail');
         try {
-            $adminUser = AdminUser::findOrFail($id);
-            if (!empty($formData['chk_change_password']) && $formData['chk_change_password'] === 'true') {
-                $validator = app(UpdateManagerForm::class);
-                $validator->validate($formData);
+            $subscriptionUser = SubscriptionUser::findOrFail($id);
+            $validator = app(UpdateSubscriptionUserForm::class);
+            $validator->validate($formData);
 
-                $adminUser->update([
-                    'subscription_user_id' => intval($formData['subscription_user']),
-                    'name' => $formData['name'],
-                    'password' => bcrypt($formData['password']),
-                ]);
-
-                return response()->json(Response::HTTP_OK);
-            }
-            if ($formData['name'] == null) {
-                return response()->json(['name' => ['必須フィールドに入力してください']], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            $adminUser->update([
-                'subscription_user_id' => $formData['subscription_user'] == null ? null : intval($formData['subscription_user']),
-                'name' => $formData['name'],
+            $subscriptionUser->update([
+                'company_name' => $formData['company_name'],
+                'sub_domain' => $formData['sub_domain'],
+                'barcode_type' => $formData['barcode_type'],
+                'pref_id' => $formData['pref_id'],
+                'zip' => $formData['zip'],
+                'address1' => $formData['address1'],
+                'address2' => $formData['address2'],
+                'tel' => $formData['tel'],
+                'manager_mail' => $formData['manager_mail'],
             ]);
 
             return response()->json(Response::HTTP_OK);
@@ -183,24 +169,25 @@ class SubscriptionUserController extends Controller
     public function getSubscriptionUsers()
     {
         $managers = SubscriptionUser::select([
-            'subscription_user_id',
-            'sub_domain',
-            'barcode_type',
-            'company_name',
-            'zip',
-            'address1',
-            'address2',
-            'tel',
-            'manager_mail',
-            'created_at',
-            'updated_at',
+            'subscription_users.subscription_user_id',
+            'subscription_users.sub_domain',
+            'subscription_users.barcode_type',
+            'subscription_users.company_name',
+            'subscription_users.zip',
+            'subscription_users.address1',
+            'subscription_users.address2',
+            'prefectures.name',
+            'subscription_users.tel',
+            'subscription_users.manager_mail',
+            'subscription_users.created_at',
+            'subscription_users.updated_at',
         ])
-            // ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
+            ->leftJoin('prefectures', 'subscription_users.pref_id', '=', 'prefectures.id')
             ->where('subscription_users.delete_flag', 0);
 
         return DataTables::of($managers)
-            ->filterColumn('company_name', function ($query, $keyword) {
-                $query->whereRaw('LOWER(subscription_users.company_name) LIKE ?', ["%{$keyword}%"]);
+            ->filterColumn('name', function ($query, $keyword) {
+                $query->whereRaw('LOWER(prefectures.name) LIKE ?', ["%{$keyword}%"]);
             })
             ->make(true);
     }
@@ -217,5 +204,15 @@ class SubscriptionUserController extends Controller
         } else {
             return response()->json('ユーザーが見つかりません', 404);
         }
+    }
+
+
+    public function autoFillAddress1($code)
+    {
+        $address = PostCodes::select('address')
+            ->where('code', '=', $code)
+            ->first();
+
+        return $address?->address;
     }
 }

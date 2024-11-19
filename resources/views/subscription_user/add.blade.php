@@ -1,108 +1,109 @@
 @extends('layouts.app')
 @extends('layouts.breadcrumb')
 @section('content')
-
+<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2-bootstrap-5-theme.min.css') }}">
 <div class="container-fluid">
-    <form id="managerForm" class="py-3">
+    <form id="subscriptionUserForm" class="py-3">
         {{csrf_field()}}
         <div class="mb-4 row">
-            <label for="name" class="col-sm-2 col-form-label">契約ユーザー名 <span class="text-sunset-orange">*</span></label>
+            <label for="company_name" class="col-sm-2 col-form-label">契約ユーザー名 <span class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
-                <div id="name-validate" class="text-sunset-orange"></div>
+                <input type="text" id="company_name" name="company_name" class="form-control"
+                    autocomplete="off">
+                <div id="company_name-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-4 row">
-            <label for="name" class="col-sm-2 col-form-label">サブドメイン <span class="text-sunset-orange">*</span></label>
+            <label for="sub_domain" class="col-sm-2 col-form-label">サブドメイン <span class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
+                    <input type="text" id="sub_domain" name="sub_domain" class="form-control"
+                        autocomplete="off">
                     <span class="input-group-text">.members.local</span>
                 </div>
-                <div id="name-validate" class="text-sunset-orange"></div>
+                <div id="sub_domain-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-4 row">
-            <label for="subscription_user" class="col-sm-2 col-form-label">バーコード種類 <span
+            <label for="barcode_type" class="col-sm-2 col-form-label">バーコード種類 <span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <select id="subscription_user" name="subscription_user" class="form-select" aria-label="契約ユーザー">
+                <select id="barcode_type" name="barcode_type" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
-                    <option value="CODE39">CODE39</option>
-                    <option value="EAN8">EAN8 (JAN8)</option>
-                    <option value="EAN13">EAN13 (JAN13)</option>
-                    <option value="UPC">UPC</option>
-                    <option value="CODABAR">CODABAR (NW-7)</option>
-                </select>
-                <div id="subscription_user-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
-        <div class="mb-4 row">
-            <label for="subscription_user" class="col-sm-2 col-form-label">都道府県</label>
-            <div class="col-sm-10">
-                <select id="subscription_user" name="subscription_user" class="form-select" aria-label="契約ユーザー">
-                    <option value="" disabled selected>--選択--</option>
-                    @foreach ($subscriptionUsers as $subscriptionUser)
-                    <option value="{{ $subscriptionUser['subscription_user_id'] }}"
-                        {{ old('subscription_user') == $subscriptionUser['subscription_user_id'] ? 'selected' : '' }}>
-                        {{ $subscriptionUser['company_name'] }}
-                    </option>
+                    @foreach ($barcodeOptions as $value=>$label)
+                    <option value="{{$value}}">{{$label}}</option>
                     @endforeach
                 </select>
-                <div id="subscription_user-validate" class="text-sunset-orange"></div>
+                <div id="barcode_type-validate" class="text-sunset-orange"></div>
+            </div>
+        </div>
+        <div class="mb-4 row">
+            <label for="pref_id" class="col-sm-2 col-form-label">都道府県</label>
+            <div class="col-sm-10">
+                <select id="pref_id" name="pref_id" class="form-select" aria-label="契約ユーザー">
+                    <option value="" disabled selected>--選択--</option>
+                    @foreach ($prefectures as $prefecture)
+                    <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
+                    @endforeach
+                </select>
+                <div id="pref_id-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
         <div class="mb-4 row">
-            <label for="name" class="col-sm-2 col-form-label">郵便番号</label>
+            <label for="first_zip" class="col-sm-2 col-form-label">郵便番号</label>
             <div class="col-sm-6">
                 <div class="input-group gap-2">
-                    <input type="text" maxlength="3" class="form-control text-center"
-                        value="{{ old('name') }}" autocomplete="off" onkeypress="return typingNumber(event)">
-                    <input type="text" maxlength="4" class="form-control text-center"
-                        value="{{ old('name') }}" autocomplete="off" onkeypress="return typingNumber(event)">
-                    <button type="button" class="btn btn-danger">自動入力</button>
+                    <input id="first_zip" name="first_zip" type="text" maxlength="3" class="form-control text-center"
+                        autocomplete="off" onkeypress="return typingNumber(event)">
+                    <input id="last_zip" name="last_zip" type="text" maxlength="4" class="form-control text-center"
+                        autocomplete="off" onkeypress="return typingNumber(event)">
+                    <button type="button" class="btn btn-danger" onclick="autoFillAddress1()">自動入力</button>
                 </div>
-                <div id="name-validate" class="text-sunset-orange"></div>
+                <div id="zip-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
         <div class="mb-4 row">
-            <label for="name" class="col-sm-2 col-form-label">住所1</label>
+            <label for="address1" class="col-sm-2 col-form-label">住所1</label>
             <div class="col-sm-10">
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
-                <div id="name-validate" class="text-sunset-orange"></div>
+                <input type="text" id="address1" name="address1" class="form-control"
+                    autocomplete="off">
+                <div id="address1-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
         <div class="mb-4 row">
-            <label for="name" class="col-sm-2 col-form-label">住所2</label>
+            <label for="address2" class="col-sm-2 col-form-label">住所2</label>
             <div class="col-sm-10">
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" autocomplete="off">
-                <div id="name-validate" class="text-sunset-orange"></div>
+                <input type="text" id="address2" name="address2" class="form-control"
+                    autocomplete="off">
+                <div id="address2-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
         <div class="mb-4 row">
-            <label for="name" class="col-sm-2 col-form-label">電話番号</label>
+            <label for="first_tel" class="col-sm-2 col-form-label">電話番号</label>
             <div class="col-sm-8">
                 <div class="input-group gap-2">
-                    <input type="text" maxlength="3" class="form-control text-center"
-                        value="{{ old('name') }}" autocomplete="off" onkeypress="return typingNumber(event)">
-                    <input type="text" maxlength="3" class="form-control text-center"
-                        value="{{ old('name') }}" autocomplete="off" onkeypress="return typingNumber(event)">
-                    <input type="text" maxlength="4" class="form-control text-center"
-                        value="{{ old('name') }}" autocomplete="off" onkeypress="return typingNumber(event)">
+                    <input id="first_tel" name="first_tel" type="text" maxlength="3" class="form-control text-center"
+                        autocomplete="off" onkeypress="return typingNumber(event)">
+                    <input id="second_tel" name="second_tel" type="text" maxlength="3" class="form-control text-center"
+                        autocomplete="off" onkeypress="return typingNumber(event)">
+                    <input id="last_tel" name="last_tel" type="text" maxlength="4" class="form-control text-center"
+                        autocomplete="off" onkeypress="return typingNumber(event)">
                 </div>
-                <div id="name-validate" class="text-sunset-orange"></div>
+                <div id="tel-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
         <div class="mb-4 row">
-            <label for="email" class="col-sm-2 col-form-label">担当者メールアドレス</label>
+            <label for="manager_mail" class="col-sm-2 col-form-label">担当者メールアドレス</label>
             <div class="col-sm-10">
-                <input id="email" name="email" class="form-control" autocomplete="off">
-                <div id="email-validate" class="text-sunset-orange"></div>
+                <input id="manager_mail" name="manager_mail" class="form-control"
+                    autocomplete="off">
+                <div id="manager_mail-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
@@ -122,9 +123,34 @@
         </div>
     </form>
 </div>
-
+<script src="{{ asset('/assets/lib/select2/js/select2.min.js') }}"></script>
 <script>
+    let previousRequest = null;
+
+    function autoFillAddress1() {
+        const first_zip_val = $('#first_zip').val();
+        const last_zip_val = $('#last_zip').val();
+        const address1 = $('#address1');
+        const code = first_zip_val + '' + last_zip_val;
+
+        if (previousRequest && previousRequest.readyState !== 4) {
+            previousRequest.abort();
+        }
+
+        previousRequest = $.ajax({
+            url: `/subscription_user/autofill_address1/${code}`,
+            type: 'GET',
+            success: (res) => {
+                address1.val(res);
+            },
+        });
+    }
+
     $(document).ready(() => {
+        $('select').select2({
+            theme: 'bootstrap-5'
+        });
+
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {
@@ -139,32 +165,17 @@
             }
         });
 
-        $('#toggle_password').on('click', (event) => {
-            const togglePassword = $(event.target);
-            const passwordInput = $('#password');
-            const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
 
-            passwordInput.attr('type', type);
-            togglePassword.toggleClass('fa-eye').toggleClass('fa-eye-slash');
-        });
-
-        $('#toggle_confirm_password').on('click', (event) => {
-            const togglePassword = $(event.target);
-            const passwordInput = $('#confirm_password');
-            const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-
-            passwordInput.attr('type', type);
-            togglePassword.toggleClass('fa-eye').toggleClass('fa-eye-slash');
-        });
-
-        $('#managerForm').on('submit', (event) => {
+        $('#subscriptionUserForm').on('submit', (event) => {
             event.preventDefault();
             clearValidate();
             disabledFormBtns()
             const formFields = getFormFields();
+            const currentUrl = window.location.href;
+            const subscriptionUserId = currentUrl.split('/').pop();
             $.ajax({
                 type: 'POST',
-                url: '{{route("manager.registerAPI")}}',
+                url: `/subscription_user/create`,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -174,7 +185,8 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        window.location.assign('/manager/list');
+                        localStorage.setItem('edit-success', 'true');
+                        window.location.assign('/subscription_user/list');
                         clearValidate();
                         clearForm();
                         enableFormBtns();
@@ -199,18 +211,26 @@
     });
 
     function getFormFields() {
-        const subscription_user = $('#subscription_user').val();
-        const name = $('#name').val();
-        const email = $('#email').val();
-        const password = $('#password').val();
-        const confirm_password = $('#confirm_password').val();
+        const company_name = $('#company_name').val();
+        const sub_domain = $('#sub_domain').val();
+        const barcode_type = $('#barcode_type').val();
+        const pref_id = $('#pref_id').val();
+        const zip = $('#first_zip').val() + '-' + $('#last_zip').val();
+        const address1 = $('#address1').val();
+        const address2 = $('#address2').val();
+        const tel = $('#first_tel').val() + $('#second_tel').val() + $('#last_tel').val();
+        const manager_mail = $('#manager_mail').val();
 
         const formFields = {
-            "subscription_user": subscription_user,
-            "name": name,
-            "email": email,
-            "password": password,
-            "confirm_password": confirm_password,
+            "company_name": company_name,
+            "sub_domain": sub_domain,
+            "barcode_type": barcode_type,
+            "pref_id": pref_id,
+            "zip": zip,
+            "address1": address1,
+            "address2": address2,
+            "tel": tel,
+            "manager_mail": manager_mail,
         }
 
         return formFields;
@@ -227,11 +247,15 @@
     }
 
     function clearForm() {
-        $('#subscription_user').val('');
-        $('#name').val('');
-        $('#email').val('');
-        $('#password').val('');
-        $('#confirm_password').val('');
+        $('#company_name').val('');
+        $('#sub_domain').val('');
+        $('#barcode_type').val('');
+        $('#pref_id').val('');
+        $('#zip').val('');
+        $('#address1').val('');
+        $('#address2').val('');
+        $('#tel').val('');
+        $('#manager_mail').val('');
     }
 
 
@@ -253,11 +277,15 @@
     }
 
     function clearValidate() {
-        $('#subscription_user-validate').text("");
-        $('#name-validate').text("");
-        $('#email-validate').text("");
-        $('#password-validate').text("");
-        $('#confirm_password-validate').text("");
+        $('#company_name-validate').text("");
+        $('#sub_domain-validate').text("");
+        $('#barcode_type-validate').text("");
+        $('#pref_id-validate').text("");
+        $('#zip-validate').text("");
+        $('#address1-validate').text("");
+        $('#address2-validate').text("");
+        $('#tel-validate').text("");
+        $('#manager_mail-validate').text("");
     }
 </script>
 

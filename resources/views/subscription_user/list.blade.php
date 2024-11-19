@@ -208,6 +208,11 @@
                     name: 'zip'
                 },
                 {
+                    title: '都道府県',
+                    data: 'name',
+                    name: 'name'
+                },
+                {
                     title: '住所1',
                     data: 'address1',
                     name: 'address1'
@@ -233,7 +238,13 @@
                     name: 'created_at',
                     render: function(data, type, row) {
                         var date = new Date(data);
-                        return date.toLocaleString('ja-JP', {
+                        return date.toLocaleDateString('ja-JP', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
                             timeZone: 'Asia/Tokyo'
                         });
                     }
@@ -244,7 +255,13 @@
                     name: 'updated_at',
                     render: function(data, type, row) {
                         var date = new Date(data);
-                        return date.toLocaleString('ja-JP', {
+                        return date.toLocaleDateString('ja-JP', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
                             timeZone: 'Asia/Tokyo'
                         });
                     }

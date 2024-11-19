@@ -94,3 +94,13 @@ table.fixedHeader-locked {
 .nav-list .nav-link.active {
     opacity: 1;
 }
+
+/* Custom breadcrumb */
+.breadcrumb-link {
+    color: var(--chinese-orange);
+    opacity: 1;
+}
+
+.breadcrumb-link:hover {
+    opacity: 0.75;
+}

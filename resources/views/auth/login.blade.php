@@ -8,7 +8,7 @@
             <div class="card bg-white">
                 <div class="card-body p-4">
                     <div class="d-flex flex-column justify-content-center align-items-center gap-2 mb-4">
-                        <h2 class="fw-bold text-primary">SIGN IN</h2>
+                        <h2 class="fw-bold text-sunset-orange">SIGN IN</h2>
                         <h1 class="fw-bold text-muted">ログイン</h1>
                         <p class="text-muted">ご登録のメールアドレスとパスワードをご入力ください。</p>
                     </div>
@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-primary rounded-3 w-100 text-white fs-5">
+                            <button type="submit" class="btn btn-chinese-orange rounded-3 w-100 fs-5">
                                 {{ __('ログイン') }}
                             </button>
                         </div>
