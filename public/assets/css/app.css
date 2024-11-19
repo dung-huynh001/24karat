@@ -3,10 +3,11 @@ div.dt-container .dt-search {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
 }
 
 div.dt-container .dt-search label {
+    text-wrap: nowrap;
     padding: 6px 12px;
     color: #fff;
     background-color: var(--royal-blue);
@@ -31,6 +32,10 @@ div.dt-container .dt-search .dt-input {
     border-top-left-radius: 0.3rem;
     border-bottom-left-radius: 0.3rem;
     flex-grow: 1;
+}
+
+div.dt-container .dt-search .dt-input:focus-visible{
+    outline: none !important;
 }
 
 .dt-actions {
@@ -103,4 +108,17 @@ table.fixedHeader-locked {
 
 .breadcrumb-link:hover {
     opacity: 0.75;
+}
+
+
+/* Custom Select2 */
+.select2-container .select2-selection--single {
+    /* height: calc(2.25rem + 2px) !important; */
+    padding: .375rem .75rem !important;
+    font-size: .9rem !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+    border: var(--bs-border-width) solid var(--bs-border-color) !important;
+    /* border: 1px solid #ced4da; */
+    border-radius: var(--bs-border-radius) !important;
 }

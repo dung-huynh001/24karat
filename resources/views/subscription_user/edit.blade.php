@@ -114,11 +114,11 @@
         </div>
 
         <div class="d-flex gap-2 justify-content-center">
-            <a id="btn_cancel" href="{{route('manager.list')}}" type="button" class="btn btn-lavender d-flex align-items-center">
+            <a id="btn_cancel" href="{{route('subscription_user.list')}}" type="button" class="btn btn-lavender d-flex align-items-center">
                 <span class="me-2 fs-7 d-inline-flex justify-content-center align-items-center">
                     <i class="fa-solid fa-circle-chevron-left"></i>
                 </span>
-                <span>＜戻る</span>
+                <span>戻る</span>
             </a>
             <button id="btn_submit" type="submit" class="btn btn-royal-blue d-flex align-items-center">
                 <span>登録</span>

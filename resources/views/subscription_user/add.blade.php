@@ -7,19 +7,19 @@
     <form id="subscriptionUserForm" class="py-3">
         {{csrf_field()}}
         <div class="mb-4 row">
-            <label for="company_name" class="col-sm-2 col-form-label">契約ユーザー名 <span class="text-sunset-orange">*</span></label>
+            <label for="company_name" class="col-sm-2 col-form-label">契約ユーザー名 <span
+                    class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input type="text" id="company_name" name="company_name" class="form-control"
-                    autocomplete="off">
+                <input type="text" id="company_name" name="company_name" class="form-control" autocomplete="off">
                 <div id="company_name-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-4 row">
-            <label for="sub_domain" class="col-sm-2 col-form-label">サブドメイン <span class="text-sunset-orange">*</span></label>
+            <label for="sub_domain" class="col-sm-2 col-form-label">サブドメイン <span
+                    class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" id="sub_domain" name="sub_domain" class="form-control"
-                        autocomplete="off">
+                    <input type="text" id="sub_domain" name="sub_domain" class="form-control" autocomplete="off">
                     <span class="input-group-text">.members.local</span>
                 </div>
                 <div id="sub_domain-validate" class="text-sunset-orange"></div>
@@ -31,8 +31,8 @@
             <div class="col-sm-10">
                 <select id="barcode_type" name="barcode_type" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
-                    @foreach ($barcodeOptions as $value=>$label)
-                    <option value="{{$value}}">{{$label}}</option>
+                    @foreach ($barcodeOptions as $value => $label)
+                        <option value="{{$value}}">{{$label}}</option>
                     @endforeach
                 </select>
                 <div id="barcode_type-validate" class="text-sunset-orange"></div>
@@ -44,7 +44,7 @@
                 <select id="pref_id" name="pref_id" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($prefectures as $prefecture)
-                    <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
+                        <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
                     @endforeach
                 </select>
                 <div id="pref_id-validate" class="text-sunset-orange"></div>
@@ -68,8 +68,7 @@
         <div class="mb-4 row">
             <label for="address1" class="col-sm-2 col-form-label">住所1</label>
             <div class="col-sm-10">
-                <input type="text" id="address1" name="address1" class="form-control"
-                    autocomplete="off">
+                <input type="text" id="address1" name="address1" class="form-control" autocomplete="off">
                 <div id="address1-validate" class="text-sunset-orange"></div>
             </div>
         </div>
@@ -77,8 +76,7 @@
         <div class="mb-4 row">
             <label for="address2" class="col-sm-2 col-form-label">住所2</label>
             <div class="col-sm-10">
-                <input type="text" id="address2" name="address2" class="form-control"
-                    autocomplete="off">
+                <input type="text" id="address2" name="address2" class="form-control" autocomplete="off">
                 <div id="address2-validate" class="text-sunset-orange"></div>
             </div>
         </div>
@@ -101,22 +99,23 @@
         <div class="mb-4 row">
             <label for="manager_mail" class="col-sm-2 col-form-label">担当者メールアドレス</label>
             <div class="col-sm-10">
-                <input id="manager_mail" name="manager_mail" class="form-control"
-                    autocomplete="off">
+                <input id="manager_mail" name="manager_mail" class="form-control" autocomplete="off">
                 <div id="manager_mail-validate" class="text-sunset-orange"></div>
             </div>
         </div>
 
         <div class="d-flex gap-2 justify-content-center">
-            <a id="btn_cancel" href="{{route('manager.list')}}" type="button" class="btn btn-lavender d-flex align-items-center">
+            <a id="btn_cancel" href="{{route('subscription_user.list')}}" type="button"
+                class="btn btn-lavender d-flex align-items-center">
                 <span class="me-2 fs-7 d-inline-flex justify-content-center align-items-center">
                     <i class="fa-solid fa-circle-chevron-left"></i>
                 </span>
-                <span>＜戻る</span>
+                <span>戻る</span>
             </a>
             <button id="btn_submit" type="submit" class="btn btn-royal-blue d-flex align-items-center">
                 <span>登録</span>
-                <span class="ms-2 square-8 rounded-circle bg-white fs-9 text-royal-blue d-inline-flex justify-content-center align-items-center">
+                <span
+                    class="ms-2 square-8 rounded-circle bg-white fs-9 text-royal-blue d-inline-flex justify-content-center align-items-center">
                     <i class="fa-solid fa-plus p-0 m-0"></i>
                 </span>
             </button>
@@ -145,6 +144,12 @@
             },
         });
     }
+
+    $(window).resize(function () {
+        $('select').select2('destroy').select2({
+            theme: 'bootstrap-5'
+        });
+    });
 
     $(document).ready(() => {
         $('select').select2({
