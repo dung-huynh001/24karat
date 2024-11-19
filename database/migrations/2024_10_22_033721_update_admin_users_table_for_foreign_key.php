@@ -13,7 +13,7 @@ class UpdateAdminUsersTableForForeignKey extends Migration
     public function up()
     {
         Schema::table('admin_users', function (Blueprint $table) {
-            $table->renameColumn('subscription_user_id', 'subscription_user_id');
+            $table->renameColumn('subcription_user_id', 'subscription_user_id');
 
             $table->foreign('subscription_user_id')
                   ->references('subscription_user_id')
@@ -32,7 +32,7 @@ class UpdateAdminUsersTableForForeignKey extends Migration
         Schema::table('admin_users', function (Blueprint $table) {
             $table->dropForeign(['subscription_user_id']);
 
-            $table->renameColumn('subscription_user_id', 'subcription_user_id');
+            $table->renameColumn('subcription_user_id', 'subscription_user_id');
         });
     }
 }

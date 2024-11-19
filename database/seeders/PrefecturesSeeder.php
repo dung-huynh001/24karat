@@ -15,7 +15,7 @@ class PrefecturesSeeder extends Seeder
     public function run()
     {
         // Delete existing data
-        DB::table('prefectures')->truncate();
+        // DB::table('prefectures')->truncate();
 
         // Seed new data
         DB::table('prefectures')->insert([
