@@ -1,9 +1,8 @@
 @extends('layouts.app')
-@extends('layouts.breadcrumb')
 @section('content')
 <!-- DataTables CSS -->
-<link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/datatables.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/responsive.dataTables.min.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/datatables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/responsive.dataTables.min.css') }}"> -->
 
 
 <div class="mb-4">
@@ -37,13 +36,8 @@
     </div>
 </div>
 
-<!-- DataTables JS -->
-<script src="{{ asset('/assets/lib/datatables/js/datatables.min.js') }}"></script>
-<script src="{{ asset('/assets/lib/datatables/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('/assets/lib/datatables/js/responsive.dataTables.min.js') }}"></script>
-<script src="{{ asset('/assets/lib/datatables/js/dataTables.fixedHeader.min.js') }}"></script>
-<script src="{{ asset('/assets/lib/datatables/js/fixedHeader.dataTables.min.js') }}"></script>
-<script src="{{ asset('/assets/lib/datatables/js/dataTables.colReorder.min.js') }}"></script>
+<!-- DataTables -->
+@include('partials.datatables')
 
 <script>
     let deleteId;
@@ -144,7 +138,8 @@
                     "sPrevious": "前",
                     "sNext": "次",
                     "sLast": "最終"
-                }
+                },
+                emptyTable: "データはありません。",
             },
             layout: {
                 topStart: 'search',
@@ -159,7 +154,38 @@
                 width: '8px',
             }],
             order: [1, 'asc'],
-            ajax: "{{ url('manager/get-managers') }}",
+            ajax: function(data, callback, settings) {
+                const startTime = new Date().getTime();
+                const timeout = 10000;
+                const emptyResult = {
+                    data: [],
+                    recordsFiltered: 0,
+                    recordsTotal: 0
+                }
+
+                $.ajax({
+                    url: "{{ url('manager/get-managers') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        const currentTime = new Date().getTime();
+                        if (currentTime - startTime > timeout) {
+                            console.warn('Request timeout!');
+                            callback(emptyResult);
+                        } else {
+                            return callback({
+                                data: response.data,
+                                recordsFiltered: response.recordsFiltered,
+                                recordsTotal: response.recordsTotal
+                            });
+                        }
+                    },
+                    error: function(xhr, error, code) {
+                        console.error('API error!');
+                        callback(emptyResult);
+                    }
+                });
+            },
             columns: [{
                     className: 'dtr-control',
                     orderable: false,

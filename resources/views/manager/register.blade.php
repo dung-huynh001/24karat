@@ -82,13 +82,9 @@
         </div>
     </form>
 </div>
-<script src="{{ asset('/assets/lib/select2/js/select2.min.js') }}"></script>
+@include('partials.select2')
 <script>
     $(document).ready(() => {
-        $('select').select2({
-            theme: 'bootstrap-5'
-        });
-
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {

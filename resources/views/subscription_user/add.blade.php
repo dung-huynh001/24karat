@@ -1,8 +1,5 @@
 @extends('layouts.app')
-@extends('layouts.breadcrumb')
 @section('content')
-<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2-bootstrap-5-theme.min.css') }}">
 <div class="container-fluid">
     <form id="subscriptionUserForm" class="py-3">
         {{csrf_field()}}
@@ -32,7 +29,7 @@
                 <select id="barcode_type" name="barcode_type" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($barcodeOptions as $value => $label)
-                        <option value="{{$value}}">{{$label}}</option>
+                    <option value="{{$value}}">{{$label}}</option>
                     @endforeach
                 </select>
                 <div id="barcode_type-validate" class="text-sunset-orange"></div>
@@ -44,7 +41,7 @@
                 <select id="pref_id" name="pref_id" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($prefectures as $prefecture)
-                        <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
+                    <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
                     @endforeach
                 </select>
                 <div id="pref_id-validate" class="text-sunset-orange"></div>
@@ -122,7 +119,7 @@
         </div>
     </form>
 </div>
-<script src="{{ asset('/assets/lib/select2/js/select2.min.js') }}"></script>
+@include('partials.select2')
 <script>
     let previousRequest = null;
 
@@ -145,17 +142,8 @@
         });
     }
 
-    $(window).resize(function () {
-        $('select').select2('destroy').select2({
-            theme: 'bootstrap-5'
-        });
-    });
 
     $(document).ready(() => {
-        $('select').select2({
-            theme: 'bootstrap-5'
-        });
-
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {

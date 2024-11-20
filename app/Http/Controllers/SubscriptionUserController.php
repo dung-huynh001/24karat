@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdminUser;
 use App\Models\SubscriptionUser;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Common\FormValidationException;
-use App\Http\Requests\RegisterManagerForm;
-use App\Http\Requests\UpdateManagerForm;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Common;
 use App\Http\Common\Constants;
 use App\Http\Requests\UpdateSubscriptionUserForm;
 use App\Models\PostCodes;

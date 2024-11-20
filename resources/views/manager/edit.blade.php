@@ -1,8 +1,5 @@
 @extends('layouts.app')
-@extends('layouts.breadcrumb')
 @section('content')
-<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/assets/lib/select2/css/select2-bootstrap-5-theme.min.css') }}">
 <div class="container-fluid">
     <form id="managerForm" method="PATCH" class="py-3">
         {{csrf_field()}}
@@ -14,7 +11,7 @@
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="" class="col-sm-2 col-form-label">契約ユーザー </label>
+            <label for="subscription_user" class="col-sm-2 col-form-label">契約ユーザー </label>
             <div class="col-sm-10">
                 <select class="form-select" id="subscription_user" name="subscription_user" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
@@ -30,16 +27,16 @@
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="" class="col-sm-2 col-form-label">名前 <span class="text-sunset-orange">*</span></label>
+            <label for="name" class="col-sm-2 col-form-label">名前 <span class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="name" name="name" value="{{$manager['name']}}">
                 <div id="name-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="" class="col-sm-2 col-form-label">メールアドレス </label>
+            <label for="email" class="col-sm-2 col-form-label">メールアドレス </label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" placeholder="email@example.com" disabled tabindex="-1"
+                <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com" disabled tabindex="-1"
                     value="{{$manager['email']}}">
             </div>
         </div>
@@ -54,10 +51,10 @@
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="newPassword" class="col-sm-2 col-form-label">新しいパスワード </label>
+            <label for="password" class="col-sm-2 col-form-label">新しいパスワード </label>
             <div class="col-sm-10">
                 <div class="position-relative">
-                    <input type="password" class="form-control" id="password" name="password" disabled>
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="off" disabled>
                     <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
                         <i class="fa-regular fa-eye-slash" id="toggle_password"></i>
                     </span>
@@ -66,10 +63,10 @@
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="confirmPassword" class="col-sm-2 col-form-label">パスワード（確認）</label>
+            <label for="confirm_password" class="col-sm-2 col-form-label">パスワード（確認）</label>
             <div class="col-sm-10">
                 <div class="position-relative">
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" disabled>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" autocomplete="off" disabled>
                     <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
                         <i class="fa-regular fa-eye-slash" id="toggle_confirm_password"></i>
                     </span>
@@ -93,14 +90,9 @@
         </div>
     </form>
 </div>
-<script src="{{ asset('/assets/lib/select2/js/select2.min.js') }}"></script>
-<script src="{{ asset('/assets/lib/select2/js/bootstrap.bundle.min.js') }}"></script>
+@include('partials.select2')
 <script>
     $(document).ready(() => {
-        $('select').select2({
-            theme: 'bootstrap-5'
-        });
-
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {

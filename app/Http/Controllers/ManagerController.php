@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Responses\ApiResponse;
 use App\Models\AdminUser;
 use App\Models\SubscriptionUser;
 use Illuminate\Http\Request;
