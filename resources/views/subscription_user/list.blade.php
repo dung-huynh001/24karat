@@ -180,6 +180,7 @@
                     url: "{{ url('/subscription_user/get-subscription_users') }}",
                     type: 'GET',
                     dataType: 'json',
+                    // data: update_column_filters_from_ajax_data,
                     success: function(response) {
                         const currentTime = new Date().getTime();
                         if (currentTime - startTime > timeout) {

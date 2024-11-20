@@ -154,38 +154,38 @@
                 width: '8px',
             }],
             order: [1, 'asc'],
-            ajax: function(data, callback, settings) {
-                const startTime = new Date().getTime();
-                const timeout = 10000;
-                const emptyResult = {
-                    data: [],
-                    recordsFiltered: 0,
-                    recordsTotal: 0
-                }
+            ajax: "/manager/get-managers",
+            // ajax: "{{ url('manager/get-managers') }}",
+            // ajax: function(data, callback, settings) {
+            //     const startTime = new Date().getTime();
+            //     const timeout = 10000;
+            //     const emptyResult = {
+            //         data: [],
+            //         recordsFiltered: 0,
+            //         recordsTotal: 0
+            //     }
 
-                $.ajax({
-                    url: "{{ url('manager/get-managers') }}",
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        const currentTime = new Date().getTime();
-                        if (currentTime - startTime > timeout) {
-                            console.warn('Request timeout!');
-                            callback(emptyResult);
-                        } else {
-                            return callback({
-                                data: response.data,
-                                recordsFiltered: response.recordsFiltered,
-                                recordsTotal: response.recordsTotal
-                            });
-                        }
-                    },
-                    error: function(xhr, error, code) {
-                        console.error('API error!');
-                        callback(emptyResult);
-                    }
-                });
-            },
+            //     $.ajax({
+            //         url: "{{ url('manager/get-managers') }}",
+            //         success: function(response) {
+            //             const currentTime = new Date().getTime();
+            //             if (currentTime - startTime > timeout) {
+            //                 console.warn('Request timeout!');
+            //                 callback(emptyResult);
+            //             } else {
+            //                 return callback({
+            //                     data: response.data,
+            //                     recordsFiltered: response.recordsFiltered,
+            //                     recordsTotal: response.recordsTotal
+            //                 });
+            //             }
+            //         },
+            //         error: function(xhr, error, code) {
+            //             console.error('API error!');
+            //             callback(emptyResult);
+            //         }
+            //     });
+            // },
             columns: [{
                     className: 'dtr-control',
                     orderable: false,
