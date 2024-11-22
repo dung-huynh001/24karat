@@ -122,3 +122,5 @@ table.fixedHeader-locked {
     /* border: 1px solid #ced4da; */
     border-radius: var(--bs-border-radius) !important;
 }
+
+/* input:-webkit-autofill { display: block; } */

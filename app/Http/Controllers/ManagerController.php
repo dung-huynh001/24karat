@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Common\FormValidationException;
 use App\Http\Requests\RegisterManagerForm;
 use App\Http\Requests\UpdateManagerForm;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class ManagerController extends Controller
 {
@@ -31,7 +32,7 @@ class ManagerController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    //Managers LIST
+    /* GET Method: Return manager list view */
     public function index()
     {
         $breadcrumbs = [
@@ -42,7 +43,7 @@ class ManagerController extends Controller
         return view('manager.list', compact('breadcrumbs'));
     }
 
-    //Register Manager GET
+    /* GET Method: Return register new manager view */
     public function register()
     {
         $breadcrumbs = [
@@ -57,7 +58,7 @@ class ManagerController extends Controller
         return view('manager.register', compact('breadcrumbs', 'subscriptionUsers'));
     }
 
-    //Register Manager POST
+    /* POST Method: Register new manager */
     public function store()
     {
         $formData = request()->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
@@ -77,6 +78,7 @@ class ManagerController extends Controller
         }
     }
 
+    /* (API) POST Method: Register new manager */
     public function registerAPI(Request $request)
     {
         $formData = $request->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
@@ -104,7 +106,7 @@ class ManagerController extends Controller
         }
     }
 
-    //Edit Manager GET
+    /* GET Method: Return edit manager view */
     public function edit($id)
     {
         $breadcrumbs = [
@@ -135,6 +137,7 @@ class ManagerController extends Controller
         ]);
     }
 
+    /* (API) PATCH Method: Update manager */
     public function update(Request $request, $id)
     {
         $formData = $request->only('subscription_user', 'name', 'password', 'confirm_password', 'chk_change_password');
@@ -167,30 +170,46 @@ class ManagerController extends Controller
         }
     }
 
-
-    // GET Manager LIST
+    /* (API) GET Method: Return managers as datatables response */
     public function getManagers()
     {
-        $managers = AdminUser::select([
-            'admin_users.admin_user_id',
-            'admin_users.name',
-            'admin_users.email',
-            'admin_users.created_at',
-            'admin_users.updated_at',
-            'subscription_users.company_name'
-        ])
-            ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
-            ->where('admin_users.delete_flag', 0);
+        try {
+            $managers = AdminUser::query()
+                ->select([
+                    'admin_users.admin_user_id',
+                    'admin_users.name',
+                    'admin_users.email',
+                    'admin_users.created_at',
+                    'admin_users.updated_at',
+                    'subscription_users.company_name',
+                ])
+                ->leftJoin('subscription_users', 'admin_users.subscription_user_id', '=', 'subscription_users.subscription_user_id')
+                ->where('admin_users.delete_flag', 0);
 
-        return DataTables::of($managers)
-            ->filterColumn('company_name', function ($query, $keyword) {
-                $query->whereRaw('LOWER(subscription_users.company_name) LIKE ?', ["%{$keyword}%"]);
-            })
-            ->make(true);
+            return DataTables::of($managers)
+                ->filterColumn(
+                    'company_name',
+                    fn($query, $keyword) =>
+                    $query->whereRaw('LOWER(subscription_users.company_name) LIKE ?', ["%{$keyword}%"])
+                )
+                ->make(true);
+        } catch (\Exception $e) {
+            // Write log
+            Log::error('Error fetching managers: ' . $e->getMessage());
+
+            // Return empty data when exception occurs
+            return response()->json([
+                'data' => [],
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'errors' => $e
+            ]);
+        }
     }
 
 
-    //DELETE Manager
+
+    /* (API) DELETE Method: Delete manager by id */
     public function delete($id)
     {
         $manager = AdminUser::find($id);

@@ -16,11 +16,11 @@
                 <select class="form-select" id="subscription_user" name="subscription_user" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($subscriptionUsers as $subscriptionUser)
-                    <option value="{{$subscriptionUser['subscription_user_id']}}"
-                        @if($manager['subscription_user_id']==$subscriptionUser['subscription_user_id']) selected
-                        @endif>
-                        {{$subscriptionUser['company_name']}}
-                    </option>
+                        <option value="{{$subscriptionUser['subscription_user_id']}}"
+                            @if($manager['subscription_user_id'] == $subscriptionUser['subscription_user_id']) selected
+                            @endif>
+                            {{$subscriptionUser['company_name']}}
+                        </option>
                     @endforeach
                 </select>
                 <div id="subscription_user-validate" class="text-sunset-orange"></div>
@@ -36,8 +36,8 @@
         <div class="mb-3 row">
             <label for="email" class="col-sm-2 col-form-label">メールアドレス </label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com" disabled tabindex="-1"
-                    value="{{$manager['email']}}">
+                <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com"
+                    disabled tabindex="-1" value="{{$manager['email']}}">
             </div>
         </div>
         <div class="mb-3 row">
@@ -54,8 +54,10 @@
             <label for="password" class="col-sm-2 col-form-label">新しいパスワード </label>
             <div class="col-sm-10">
                 <div class="position-relative">
-                    <input type="password" class="form-control" id="password" name="password" autocomplete="off" disabled>
-                    <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="off"
+                        disabled>
+                    <span class="position-absolute top-50 translate-middle"
+                        style="right: 0; z-index: 9; cursor: pointer;">
                         <i class="fa-regular fa-eye-slash" id="toggle_password"></i>
                     </span>
                 </div>
@@ -66,8 +68,10 @@
             <label for="confirm_password" class="col-sm-2 col-form-label">パスワード（確認）</label>
             <div class="col-sm-10">
                 <div class="position-relative">
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" autocomplete="off" disabled>
-                    <span class="position-absolute top-50 translate-middle" style="right: 0; z-index: 9; cursor: pointer;">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                        autocomplete="off" disabled>
+                    <span class="position-absolute top-50 translate-middle"
+                        style="right: 0; z-index: 9; cursor: pointer;">
                         <i class="fa-regular fa-eye-slash" id="toggle_confirm_password"></i>
                     </span>
                 </div>
@@ -75,7 +79,8 @@
             </div>
         </div>
         <div class="d-flex gap-2 justify-content-center">
-            <a id="btn_cancel" href="{{route("manager.list")}}" type="button" class="btn btn-lavender d-flex align-items-center shadow-sm">
+            <a id="btn_cancel" href="{{route("manager.list")}}" type="button"
+                class="btn btn-lavender d-flex align-items-center shadow-sm">
                 <span class="me-2 fs-7 d-inline-flex justify-content-center align-items-center">
                     <i class="fa-solid fa-circle-chevron-left p-0 m-0"></i>
                 </span>
@@ -91,6 +96,7 @@
     </form>
 </div>
 @include('partials.select2')
+@include('partials.form')
 <script>
     $(document).ready(() => {
         $('input').on('input', (event) => {
@@ -159,13 +165,7 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        localStorage.setItem('edit-success', 'true');
-                        // $.toast({
-                        //     heading: '成功',
-                        //     text: '正常に更新されました',
-                        //     icon: 'success',
-                        //     position: 'top-right'
-                        // })
+                        localStorage.setItem('update-success', 'true');
                         window.location.assign('/manager/list');
                         clearValidate();
                         enableFormBtns();

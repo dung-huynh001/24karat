@@ -17,7 +17,7 @@
             <div class="col-sm-10">
                 <div class="input-group">
                     <input type="text" id="sub_domain" name="sub_domain" class="form-control" autocomplete="off">
-                    <span class="input-group-text">.members.local</span>
+                    <span class="input-group-text">{{ env('APP_URL') }}</span>
                 </div>
                 <div id="sub_domain-validate" class="text-sunset-orange"></div>
             </div>
@@ -29,7 +29,7 @@
                 <select id="barcode_type" name="barcode_type" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($barcodeOptions as $value => $label)
-                    <option value="{{$value}}">{{$label}}</option>
+                        <option value="{{$value}}">{{$label}}</option>
                     @endforeach
                 </select>
                 <div id="barcode_type-validate" class="text-sunset-orange"></div>
@@ -41,7 +41,7 @@
                 <select id="pref_id" name="pref_id" class="form-select" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($prefectures as $prefecture)
-                    <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
+                        <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
                     @endforeach
                 </select>
                 <div id="pref_id-validate" class="text-sunset-orange"></div>
@@ -120,6 +120,7 @@
     </form>
 </div>
 @include('partials.select2')
+@include('partials.form')
 <script>
     let previousRequest = null;
 
@@ -178,7 +179,7 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        localStorage.setItem('edit-success', 'true');
+                        localStorage.setItem('create-success', 'true');
                         window.location.assign('/subscription_user/list');
                         clearValidate();
                         clearForm();

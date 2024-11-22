@@ -35,42 +35,19 @@
 
 <!-- DataTables -->
 @include('partials.datatables')
+@include('partials.toast')
 
 <script>
     let deleteId;
-    $(document).ready(function() {
-        $.fn.dataTable.ext.errMode = 'none';
-
-        if (localStorage.getItem('edit-success')) {
-            $.toast({
-                heading: '成功',
-                text: '正常に更新されました',
-                icon: 'success',
-                position: 'top-right'
-            })
-
-            localStorage.removeItem('edit-success');
-        }
-
-        if (localStorage.getItem('register-success')) {
-            $.toast({
-                heading: '成功',
-                text: 'マネージャー登録が成功しました',
-                icon: 'success',
-                position: 'top-right'
-            })
-
-            localStorage.removeItem('register-success');
-        }
-
-        $(document).on('click', '.btn_delete', function(event) {
+    $(document).ready(function () {
+        $(document).on('click', '.btn_delete', function (event) {
             const btnId = $(this).data('id');
             deleteId = btnId;
             console.log(`Id bị xóa là: ${deleteId}`);
         });
 
 
-        $('#btn_delete_confirm').on('click', function(event) {
+        $('#btn_delete_confirm').on('click', function (event) {
             const urlDelete = `delete/${deleteId}`;
             $.ajax({
                 url: urlDelete,
@@ -81,17 +58,14 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
-                success: function(res) {
+                success: function (res) {
                     $('#deleteModal').modal('hide');
                     $('#subscriptionUserTbl').DataTable().ajax.reload();
-                    $.toast({
-                        heading: '成功',
-                        text: '正常に削除されました',
-                        icon: 'success',
-                        position: 'top-right'
+                    showActionToast({
+                        action: DELETED_ACTION
                     })
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     const errmsg = xhr.responseText;
                     $.toast({
                         heading: 'エラー',
@@ -103,8 +77,6 @@
                 }
             });
         });
-
-
 
         const table = $('#subscriptionUserTbl').DataTable({
             processing: true,
@@ -144,127 +116,92 @@
                 bottomStart: '',
             },
             columnDefs: [{
-                    className: 'dtr-control',
-                    orderable: false,
-                    targets: 0,
-                    width: '8px',
-                },
-                {
-                    responsivePriority: 1,
-                    targets: 0
-                },
-                {
-                    responsivePriority: 2,
-                    targets: 1
-                },
-                {
-                    responsivePriority: 3,
-                    targets: 2
-                },
-                {
-                    responsivePriority: 4,
-                    targets: '_all'
-                }
+                className: 'dtr-control',
+                orderable: false,
+                targets: 0,
+                width: '8px',
+            },
+            {
+                responsivePriority: 1,
+                targets: 0
+            },
+            {
+                responsivePriority: 2,
+                targets: 1
+            },
+            {
+                responsivePriority: 3,
+                targets: 2
+            },
+            {
+                responsivePriority: 4,
+                targets: '_all'
+            }
             ],
             order: [1, 'asc'],
-            ajax: function(data, callback, settings) {
-                const startTime = new Date().getTime();
-                const timeout = 10000;
-                const emptyResult = {
-                    data: [],
-                    recordsFiltered: 0,
-                    recordsTotal: 0
-                }
-
-                $.ajax({
-                    url: "{{ url('/subscription_user/get-subscription_users') }}",
-                    type: 'GET',
-                    dataType: 'json',
-                    // data: update_column_filters_from_ajax_data,
-                    success: function(response) {
-                        const currentTime = new Date().getTime();
-                        if (currentTime - startTime > timeout) {
-                            console.warn('Request timeout!');
-                            callback(emptyResult);
-                        } else {
-                            return callback({
-                                data: response.data,
-                                recordsFiltered: response.recordsFiltered,
-                                recordsTotal: response.recordsTotal
-                            });
-                        }
-                    },
-                    error: function(xhr, error, code) {
-                        console.error('API error!');
-                        callback(emptyResult);
-                    }
-                });
-            },
+            ajax: "{{ url('/subscription_user/get-subscription_users') }}",
             columns: [{
-                    className: 'dtr-control',
-                    orderable: false,
-                    targets: 0
-                },
-                {
-                    title: 'No.',
-                    data: 'subscription_user_id',
-                    name: 'subscription_user_id'
-                },
-                {
-                    title: 'サブドメイン',
-                    data: 'sub_domain',
-                    name: 'sub_domain',
-                    render: function(data, type, row) {
-                        const url = `https://${data}.members.local`;
-                        return `<a class="link-primary" target="_blank" href="${url}">${url}</a>`
-                    }
-                },
-                {
-                    title: 'バーコード種類',
-                    data: 'barcode_type',
-                    name: 'barcode_type'
-                },
-                {
-                    title: '契約ユーザー',
-                    data: 'company_name',
-                    name: 'company_name'
-                },
-                {
-                    title: '郵便番号',
-                    data: 'zip',
-                    name: 'zip'
-                },
-                {
-                    title: '都道府県',
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    title: '更新日時',
-                    data: 'updated_at',
-                    name: 'updated_at',
-                    render: function(data, type, row) {
-                        var date = new Date(data);
-                        return date.toLocaleDateString('ja-JP', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            timeZone: 'Asia/Tokyo'
-                        });
-                    }
-                },
-                {
-                    // title: '操作',
-                    // visible: false,
-                    orderable: false,
-                    data: 'subscription_user_id',
-                    name: 'subscription_user_id',
-                    render: function(data, type, row) {
-                        var actions =
-                            `<div class="dt-actions">
+                className: 'dtr-control',
+                orderable: false,
+                targets: 0
+            },
+            {
+                title: 'No.',
+                data: 'subscription_user_id',
+                name: 'subscription_user_id'
+            },
+            {
+                title: 'サブドメイン',
+                data: 'sub_domain',
+                name: 'sub_domain',
+                render: function (data, type, row) {
+                    return `<a class="link-primary" target="_blank" href="${data}">${data}</a>`
+                }
+            },
+            {
+                title: 'バーコード種類',
+                data: 'barcode_type',
+                name: 'barcode_type'
+            },
+            {
+                title: '契約ユーザー',
+                data: 'company_name',
+                name: 'company_name'
+            },
+            {
+                title: '郵便番号',
+                data: 'zip',
+                name: 'zip'
+            },
+            {
+                title: '都道府県',
+                data: 'name',
+                name: 'name'
+            },
+            {
+                title: '更新日時',
+                data: 'updated_at',
+                name: 'updated_at',
+                render: function (data, type, row) {
+                    var date = new Date(data);
+                    return date.toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZone: 'Asia/Tokyo'
+                    });
+                }
+            },
+            {
+                orderable: false,
+                data: 'subscription_user_id',
+                name: 'subscription_user_id',
+                render: function (data, type, row) {
+                    var actions =
+                        `<div class="dt-actions">
                                 <div class="d-flex gap-2">
                                     <a href="/subscription_user/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
                                         <span>編集</span>
@@ -280,9 +217,9 @@
                                     </button>
                                 </div>
                             </div>`;
-                        return actions;
-                    }
+                    return actions;
                 }
+            }
             ]
         });
 

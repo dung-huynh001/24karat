@@ -6,3 +6,8 @@
 <script src="{{ asset('/assets/lib/datatables/js/dataTables.fixedHeader.min.js') }}"></script>
 <script src="{{ asset('/assets/lib/datatables/js/fixedHeader.dataTables.min.js') }}"></script>
 <script src="{{ asset('/assets/lib/datatables/js/dataTables.colReorder.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $.fn.dataTable.ext.errMode = 'none';
+    })
+</script>

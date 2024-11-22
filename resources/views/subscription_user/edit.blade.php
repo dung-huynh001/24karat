@@ -15,7 +15,7 @@
             <div class="col-sm-10">
                 <div class="input-group">
                     <input type="text" id="sub_domain" name="sub_domain" class="form-control" value="{{$subscriptionUser->sub_domain}}" autocomplete="off">
-                    <span class="input-group-text">.members.local</span>
+                    <span class="input-group-text">{{ env('APP_URL') }}</span>
                 </div>
                 <div id="sub_domain-validate" class="text-sunset-orange"></div>
             </div>
@@ -127,6 +127,7 @@
     </form>
 </div>
 @include('partials.select2')
+@include('partials.form')
 <script>
     let previousRequest = null;
 
@@ -184,7 +185,7 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        localStorage.setItem('edit-success', 'true');
+                        localStorage.setItem('update-success', 'true');
                         window.location.assign('/subscription_user/list');
                         clearValidate();
                         clearForm();

@@ -1,9 +1,5 @@
 @extends('layouts.app')
 @section('content')
-<!-- DataTables CSS -->
-<!-- <link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/datatables.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/assets/lib/datatables/css/responsive.dataTables.min.css') }}"> -->
-
 
 <div class="mb-4">
     <a role="button" href="{{route("manager.register")}}" class="btn btn-royal-blue">管理者登録</a>
@@ -18,7 +14,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -30,7 +27,8 @@
             </div>
             <div class="modal-footer">
                 <button id="btn_delete_confirm" type="button" class="btn btn-royal-blue">はい</button>
-                <button id="btn_delete_cancel" type="button" class="btn btn-sunset-orange" data-bs-dismiss="modal">いいえ</button>
+                <button id="btn_delete_cancel" type="button" class="btn btn-sunset-orange"
+                    data-bs-dismiss="modal">いいえ</button>
             </div>
         </div>
     </div>
@@ -38,42 +36,20 @@
 
 <!-- DataTables -->
 @include('partials.datatables')
+@include('partials.toast')
 
 <script>
     let deleteId;
-    $(document).ready(function() {
-        $.fn.dataTable.ext.errMode = 'none';
 
-        if (localStorage.getItem('edit-success')) {
-            $.toast({
-                heading: '成功',
-                text: '正常に更新されました',
-                icon: 'success',
-                position: 'top-right'
-            })
-
-            localStorage.removeItem('edit-success');
-        }
-
-        if (localStorage.getItem('register-success')) {
-            $.toast({
-                heading: '成功',
-                text: 'マネージャー登録が成功しました',
-                icon: 'success',
-                position: 'top-right'
-            })
-
-            localStorage.removeItem('register-success');
-        }
-
-        $(document).on('click', '.btn_delete', function(event) {
+    $(document).ready(function () {
+        $(document).on('click', '.btn_delete', function (event) {
             const btnId = $(this).data('id');
             deleteId = btnId;
             console.log(`Id bị xóa là: ${deleteId}`);
         });
 
 
-        $('#btn_delete_confirm').on('click', function(event) {
+        $('#btn_delete_confirm').on('click', function (event) {
             const urlDelete = `delete/${deleteId}`;
             $.ajax({
                 url: urlDelete,
@@ -84,17 +60,12 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
-                success: function(res) {
+                success: function (res) {
                     $('#deleteModal').modal('hide');
                     $('#managerTbl').DataTable().ajax.reload();
-                    $.toast({
-                        heading: '成功',
-                        text: '正常に削除されました',
-                        icon: 'success',
-                        position: 'top-right'
-                    })
+                    localStorage.setItem('delete-success', 'true')
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     const errmsg = xhr.responseText;
                     $.toast({
                         heading: 'エラー',
@@ -155,105 +126,72 @@
             }],
             order: [1, 'asc'],
             ajax: "/manager/get-managers",
-            // ajax: "{{ url('manager/get-managers') }}",
-            // ajax: function(data, callback, settings) {
-            //     const startTime = new Date().getTime();
-            //     const timeout = 10000;
-            //     const emptyResult = {
-            //         data: [],
-            //         recordsFiltered: 0,
-            //         recordsTotal: 0
-            //     }
-
-            //     $.ajax({
-            //         url: "{{ url('manager/get-managers') }}",
-            //         success: function(response) {
-            //             const currentTime = new Date().getTime();
-            //             if (currentTime - startTime > timeout) {
-            //                 console.warn('Request timeout!');
-            //                 callback(emptyResult);
-            //             } else {
-            //                 return callback({
-            //                     data: response.data,
-            //                     recordsFiltered: response.recordsFiltered,
-            //                     recordsTotal: response.recordsTotal
-            //                 });
-            //             }
-            //         },
-            //         error: function(xhr, error, code) {
-            //             console.error('API error!');
-            //             callback(emptyResult);
-            //         }
-            //     });
-            // },
             columns: [{
-                    className: 'dtr-control',
-                    orderable: false,
-                    targets: 0
-                },
-                {
-                    title: 'No.',
-                    data: 'admin_user_id',
-                    name: 'admin_user_id'
-                },
-                {
-                    title: '名前',
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    title: 'メールアドレス',
-                    data: 'email',
-                    name: 'email'
-                },
-                {
-                    title: '契約ユーザー',
-                    data: 'company_name',
-                    name: 'company_name'
-                },
-                {
-                    title: '作成日',
-                    data: 'created_at',
-                    name: 'created_at',
-                    render: function(data, type, row) {
-                        var date = new Date(data);
-                        return date.toLocaleDateString('ja-JP', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            timeZone: 'Asia/Tokyo'
-                        });
-                    }
-                },
-                {
-                    title: '更新日時',
-                    data: 'updated_at',
-                    name: 'updated_at',
-                    render: function(data, type, row) {
-                        var date = new Date(data);
-                        return date.toLocaleDateString('ja-JP', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            timeZone: 'Asia/Tokyo'
-                        });
-                    }
-                },
-                {
-                    // title: '操作',
-                    // visible: false,
-                    orderable: false,
-                    data: 'admin_user_id',
-                    name: 'admin_user_id',
-                    render: function(data, type, row) {
-                        var actions =
-                            `<div class="dt-actions">
+                className: 'dtr-control',
+                orderable: false,
+                targets: 0
+            },
+            {
+                title: 'No.',
+                data: 'admin_user_id',
+                name: 'admin_user_id'
+            },
+            {
+                title: '名前',
+                data: 'name',
+                name: 'name'
+            },
+            {
+                title: 'メールアドレス',
+                data: 'email',
+                name: 'email'
+            },
+            {
+                title: '契約ユーザー',
+                data: 'company_name',
+                name: 'company_name'
+            },
+            {
+                title: '作成日',
+                data: 'created_at',
+                name: 'created_at',
+                render: function (data, type, row) {
+                    var date = new Date(data);
+                    return date.toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZone: 'Asia/Tokyo'
+                    });
+                }
+            },
+            {
+                title: '更新日時',
+                data: 'updated_at',
+                name: 'updated_at',
+                render: function (data, type, row) {
+                    var date = new Date(data);
+                    return date.toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZone: 'Asia/Tokyo'
+                    });
+                }
+            },
+            {
+                orderable: false,
+                data: 'admin_user_id',
+                name: 'admin_user_id',
+                render: function (data, type, row) {
+                    var actions =
+                        `<div class="dt-actions">
                                 <div class="d-flex gap-2">
                                     <a href="/manager/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
                                         <span>編集</span>
@@ -269,9 +207,9 @@
                                     </button>
                                 </div>
                             </div>`;
-                        return actions;
-                    }
+                    return actions;
                 }
+            }
             ]
         });
 

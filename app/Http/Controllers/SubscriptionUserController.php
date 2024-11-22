@@ -11,6 +11,8 @@ use App\Http\Common\Constants;
 use App\Http\Requests\UpdateSubscriptionUserForm;
 use App\Models\PostCodes;
 use App\Models\Prefectures;
+use Illuminate\Support\Facades\Log;
+
 
 class SubscriptionUserController extends Controller
 {
@@ -31,7 +33,7 @@ class SubscriptionUserController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    //Managers LIST
+    /* GET Method: Return subscription user list view */
     public function index()
     {
         $breadcrumbs = [
@@ -42,7 +44,7 @@ class SubscriptionUserController extends Controller
         return view('subscription_user.list', compact('breadcrumbs'));
     }
 
-    //Register Manager GET
+    /* GET Method: Return add new subscription user view */
     public function add()
     {
         $breadcrumbs = [
@@ -66,6 +68,7 @@ class SubscriptionUserController extends Controller
         ]);
     }
 
+    /* (API) POST Method: create new subscription user */
     public function create(Request $request)
     {
         $formData = $request
@@ -92,7 +95,7 @@ class SubscriptionUserController extends Controller
         }
     }
 
-    //Edit Manager GET
+    /* GET Method: Return edit subscription user view */
     public function edit($id)
     {
         $breadcrumbs = [
@@ -132,6 +135,7 @@ class SubscriptionUserController extends Controller
         ]);
     }
 
+    /* (API) PATCH Method: Update subscription user */
     public function update(Request $request, $id)
     {
         $formData = $request
@@ -159,36 +163,54 @@ class SubscriptionUserController extends Controller
         }
     }
 
-
-    // GET Manager LIST
+    /* (API) GET Method: Return subscription users as datatables response */
     public function getSubscriptionUsers()
     {
-        $managers = SubscriptionUser::select([
-            'subscription_users.subscription_user_id',
-            'subscription_users.sub_domain',
-            'subscription_users.barcode_type',
-            'subscription_users.company_name',
-            'subscription_users.zip',
-            'subscription_users.address1',
-            'subscription_users.address2',
-            'prefectures.name',
-            'subscription_users.tel',
-            'subscription_users.manager_mail',
-            'subscription_users.created_at',
-            'subscription_users.updated_at',
-        ])
-            ->leftJoin('prefectures', 'subscription_users.pref_id', '=', 'prefectures.id')
-            ->where('subscription_users.delete_flag', 0);
+        try {
+            $managers = SubscriptionUser::select([
+                'subscription_users.subscription_user_id',
+                'subscription_users.sub_domain',
+                'subscription_users.barcode_type',
+                'subscription_users.company_name',
+                'subscription_users.zip',
+                'subscription_users.address1',
+                'subscription_users.address2',
+                'prefectures.name',
+                'subscription_users.tel',
+                'subscription_users.manager_mail',
+                'subscription_users.created_at',
+                'subscription_users.updated_at',
+            ])
+                ->leftJoin('prefectures', 'subscription_users.pref_id', '=', 'prefectures.id')
+                ->where('subscription_users.delete_flag', 0);
 
-        return DataTables::of($managers)
-            ->filterColumn('name', function ($query, $keyword) {
-                $query->whereRaw('LOWER(prefectures.name) LIKE ?', ["%{$keyword}%"]);
-            })
-            ->make(true);
+            $sub_domain = env('APP_URL');
+
+            return DataTables::of($managers)
+                ->editColumn('sub_domain', function ($manager) use ($sub_domain) {
+                    // Thực hiện thay đổi sub_domain
+                    return 'https://' . $manager->sub_domain . '.' . $sub_domain;
+                })
+                ->filterColumn('name', function ($query, $keyword) {
+                    $query->whereRaw('LOWER(prefectures.name) LIKE ?', ["%{$keyword}%"]);
+                })
+                ->make(true);
+        } catch (\Exception $e) {
+            // Write log
+            Log::error('Error fetching managers: ' . $e->getMessage());
+
+            // Return empty data when exception occurs
+            return response()->json([
+                'data' => [],
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'errors' => $e
+            ]);
+        }
     }
 
 
-    //DELETE Manager
+    /* (API) DELETE Method: Delete subscription user by id */
     public function delete($id)
     {
         $manager = SubscriptionUser::find($id);
@@ -201,7 +223,7 @@ class SubscriptionUserController extends Controller
         }
     }
 
-
+    /* (API) GET Method: Return address1 by code */
     public function autoFillAddress1($code)
     {
         $address = PostCodes::select('address')

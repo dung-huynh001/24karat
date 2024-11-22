@@ -83,6 +83,7 @@
     </form>
 </div>
 @include('partials.select2')
+@include('partials.form')
 <script>
     $(document).ready(() => {
         $('input').on('input', (event) => {
@@ -134,12 +135,7 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        // $.toast({
-                        //     heading: '成功',
-                        //     text: 'マネージャー登録が成功しました',
-                        //     icon: 'success',
-                        //     position: 'top-right'
-                        // })
+                        localStorage.setItem('create-success', 'true');
                         window.location.assign('/manager/list');
                         clearValidate();
                         clearForm();
