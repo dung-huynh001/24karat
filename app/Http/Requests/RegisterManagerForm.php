@@ -16,6 +16,7 @@ class RegisterManagerForm extends BaseValidator
             'email' => 'required|email',
             'password' => 'required|string|min:8|regex:/[0-9]/|regex:/[!@#$%^&*\-_+=]/',
             'confirm_password' => 'required|string|min:8|same:password',
+            'avatar' => 'nullable|string',
         ];
     }
 

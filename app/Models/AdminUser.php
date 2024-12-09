@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
+
 
 class AdminUser extends Authenticatable
 {
@@ -61,5 +62,10 @@ class AdminUser extends Authenticatable
     public function subscriptionUser()
     {
         return $this->belongsTo(SubscriptionUser::class, 'subscription_user_id', 'subscription_user_id');
+    }
+
+    public function getAvatarUrl()
+    {
+        return $this->avatar ? Storage::url($this->avatar) : asset('/assets/images/default-user.png');
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -26,7 +28,12 @@ class HomeController extends Controller
         $breadcrumbs = [
             ['title' => 'ダッシュボード', 'url' => '/dashboard', 'active' => true],
         ];
-
-        return view('home', compact('breadcrumbs'));
+        $user = Auth::user();
+        if ($user instanceof AdminUser) {
+            $avatarUrl = $user->getAvatarUrl();
+        } else {
+            $avatarUrl = asset('/assets/images/default-avatar.png');
+        }
+        return view('home', compact('breadcrumbs', 'avatarUrl'));
     }
 }

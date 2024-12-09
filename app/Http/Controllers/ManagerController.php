@@ -12,6 +12,8 @@ use App\Http\Requests\RegisterManagerForm;
 use App\Http\Requests\UpdateManagerForm;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Storage;
+
 
 class ManagerController extends Controller
 {
@@ -81,11 +83,16 @@ class ManagerController extends Controller
     /* (API) POST Method: Register new manager */
     public function registerAPI(Request $request)
     {
-        $formData = $request->only('subscription_user', 'name', 'email', 'password', 'confirm_password');
+        $formData = $request->only('subscription_user', 'name', 'email', 'password', 'confirm_password', 'avatar_data');
 
         try {
             $validator = app(RegisterManagerForm::class);
             $validator->validate($formData);
+
+            $avatarPath = 'uploads/avatar/defaut-user.png';
+            if($formData['avatar_data'] != null) {
+                $avatarPath = $this->saveImageToFolder($formData['name'], $formData['avatar_data']);
+            }
 
             if (AdminUser::where('email', $formData['email'])->exists()) {
                 return response()->json(
@@ -99,11 +106,25 @@ class ManagerController extends Controller
                 'name' => $formData['name'],
                 'email' => $formData['email'],
                 'password' => bcrypt($formData['password']),
+                'avatar' => $avatarPath,
             ]);
             return response()->json(Response::HTTP_OK);
         } catch (FormValidationException $e) {
             return response()->json($e->getErrors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+    }
+    /* Save $base64Iamge to folder */
+    public function saveImageToFolder(string $username, string $base64Image) {
+        preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type);
+        $type = strtolower($type[1]); // Get extension file
+
+        $base64Image = preg_replace('/^data:image\/\w+;base64,/', '', $base64Image);
+        $base64Image = str_replace(' ', '+', $base64Image);
+
+        $fileName = $username.uniqid() . '.' . $type; // Create unique file name
+        $filePath = "uploads/avatars/$fileName";
+        Storage::disk('public')->put($filePath, base64_decode($base64Image));
+        return $filePath;
     }
 
     /* GET Method: Return edit manager view */

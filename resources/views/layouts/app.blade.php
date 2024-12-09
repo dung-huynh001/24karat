@@ -73,7 +73,7 @@
                                 aria-haspopup="true" aria-expanded="false" v-pre>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fs-1">
-                                        <img class="rounded-circle" src="{{url('/assets/images/default-user.png')}}"
+                                        <img class="rounded-circle" src="{{$avatarUrl ?? asset('/assets/images/default-user.png')}}"
                                             alt="user-img" style="width: 45px">
                                     </span>
                                     <div class="d-flex flex-column">

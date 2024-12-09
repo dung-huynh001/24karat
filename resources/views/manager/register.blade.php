@@ -70,9 +70,9 @@
             <div class="col-sm-10">
                 <input type="file" id="avatar" name="avatar" class="form-control" accept="image/*">
                 <!-- Input contain Data to send to server -->
-                <input type="hidden" id="avatarData" name="avatarData">
+                <input type="hidden" id="avatar_data" name="avatar_data">
                 <div id="avatar-validate" class="text-sunset-orange"></div>
-            </div>      
+            </div>
         </div>
 
         <!-- Modal Croppie -->
@@ -113,6 +113,12 @@
                     <i class="fa-solid fa-plus p-0 m-0"></i>
                 </span>
             </button>
+            <button id="btn_test_submit" type="button" class="btn btn-danger d-flex align-items-center">
+                <span>登録</span>
+                <span class="ms-2 square-8 rounded-circle bg-white fs-9 text-royal-blue d-inline-flex justify-content-center align-items-center">
+                    <i class="fa-solid fa-plus p-0 m-0"></i>
+                </span>
+            </button>
         </div>
     </form>
 </div>
@@ -136,8 +142,15 @@
                 reader.onload = (event) => {
                     $('#cropModal').show();
                     croppieInstance = new Croppie(document.getElementById('croppieContainer'), {
-                        viewport: { width: 150, height: 150, type: 'circle' },
-                        boundary: { width: 300, height: 300 },
+                        viewport: {
+                            width: 150,
+                            height: 150,
+                            type: 'circle'
+                        },
+                        boundary: {
+                            width: 300,
+                            height: 300
+                        },
                         showZoomer: true,
                     });
                     croppieInstance.bind({
@@ -166,7 +179,7 @@
                 $('#avatarPreviewImg').attr('src', base64);
 
                 // Assign base64 image to hidden input to send to server
-                $('#avatarData').val(base64);
+                $('#avatar_data').val(base64);
                 $('#cropModal').hide();
                 croppieInstance.destroy();
             });
@@ -176,7 +189,7 @@
             $('#avatar').val(null);
             $('#avatarPreviewImg').attr('src', "{{url('/assets/images/default-user.png')}}");
         }
-        
+
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {
@@ -251,23 +264,41 @@
         });
     });
 
+    // function getFormFields() {
+    //     const subscription_user = $('#subscription_user').val();
+    //     const name = $('#name').val();
+    //     const email = $('#email').val();
+    //     const password = $('#password').val();
+    //     const confirm_password = $('#confirm_password').val();
+
+    //     const formFields = {
+    //         "subscription_user": subscription_user,
+    //         "name": name,
+    //         "email": email,
+    //         "password": password,
+    //         "confirm_password": confirm_password,
+    //     }
+
+    //     return formFields;
+    // }
+
+    $("#btn_test_submit").on('click', function(event) {
+        getFormFields();
+    });
+
     function getFormFields() {
-        const subscription_user = $('#subscription_user').val();
-        const name = $('#name').val();
-        const email = $('#email').val();
-        const password = $('#password').val();
-        const confirm_password = $('#confirm_password').val();
+        const formData = {};
+        $('#managerForm')
+            .serializeArray()
+            .forEach((field) => {
+                formData[field.name] = field.value;
+            });
 
-        const formFields = {
-            "subscription_user": subscription_user,
-            "name": name,
-            "email": email,
-            "password": password,
-            "confirm_password": confirm_password,
-        }
+        console.log(formData);
 
-        return formFields;
+        return formData;
     }
+
 
     function disabledFormBtns() {
         $('#btn_submit').addClass('disabled');
@@ -286,8 +317,6 @@
         $('#password').val('');
         $('#confirm_password').val('');
     }
-
-
 
     function showValidateError(errors) {
         Object.keys(errors).forEach((key) => {
