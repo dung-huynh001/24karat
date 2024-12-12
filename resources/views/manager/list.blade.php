@@ -41,15 +41,15 @@
 <script>
     let deleteId;
 
-    $(document).ready(function () {
-        $(document).on('click', '.btn_delete', function (event) {
+    $(document).ready(function() {
+        $(document).on('click', '.btn_delete', function(event) {
             const btnId = $(this).data('id');
             deleteId = btnId;
             console.log(`Id bị xóa là: ${deleteId}`);
         });
 
 
-        $('#btn_delete_confirm').on('click', function (event) {
+        $('#btn_delete_confirm').on('click', function(event) {
             const urlDelete = `delete/${deleteId}`;
             $.ajax({
                 url: urlDelete,
@@ -60,12 +60,12 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
-                success: function (res) {
+                success: function(res) {
                     $('#deleteModal').modal('hide');
                     $('#managerTbl').DataTable().ajax.reload();
                     localStorage.setItem('delete-success', 'true')
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     const errmsg = xhr.responseText;
                     $.toast({
                         heading: 'エラー',
@@ -127,71 +127,79 @@
             order: [1, 'asc'],
             ajax: "/manager/get-managers",
             columns: [{
-                className: 'dtr-control',
-                orderable: false,
-                targets: 0
-            },
-            {
-                title: 'No.',
-                data: 'admin_user_id',
-                name: 'admin_user_id'
-            },
-            {
-                title: '名前',
-                data: 'name',
-                name: 'name'
-            },
-            {
-                title: 'メールアドレス',
-                data: 'email',
-                name: 'email'
-            },
-            {
-                title: '契約ユーザー',
-                data: 'company_name',
-                name: 'company_name'
-            },
-            {
-                title: '作成日',
-                data: 'created_at',
-                name: 'created_at',
-                render: function (data, type, row) {
-                    var date = new Date(data);
-                    return date.toLocaleDateString('ja-JP', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZone: 'Asia/Tokyo'
-                    });
-                }
-            },
-            {
-                title: '更新日時',
-                data: 'updated_at',
-                name: 'updated_at',
-                render: function (data, type, row) {
-                    var date = new Date(data);
-                    return date.toLocaleDateString('ja-JP', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZone: 'Asia/Tokyo'
-                    });
-                }
-            },
-            {
-                orderable: false,
-                data: 'admin_user_id',
-                name: 'admin_user_id',
-                render: function (data, type, row) {
-                    var actions =
-                        `<div class="dt-actions">
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 0
+                },
+                {
+                    title: 'No.',
+                    data: 'admin_user_id',
+                    name: 'admin_user_id'
+                },
+                {
+                    title: '名前',
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    title: 'メールアドレス',
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    title: '契約ユーザー',
+                    data: 'company_name',
+                    name: 'company_name'
+                },
+                {
+                    // title: 'is_butterflydance_user',
+                    data: 'is_butterflydance_user',
+                    name: 'is_butterflydance_user',
+                    orderable: false,
+                    searchable: false,
+                    visible: false,
+                },
+                {
+                    title: '作成日',
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data, type, row) {
+                        var date = new Date(data);
+                        return date.toLocaleDateString('ja-JP', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            timeZone: 'Asia/Tokyo'
+                        });
+                    }
+                },
+                {
+                    title: '更新日時',
+                    data: 'updated_at',
+                    name: 'updated_at',
+                    render: function(data, type, row) {
+                        var date = new Date(data);
+                        return date.toLocaleDateString('ja-JP', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            timeZone: 'Asia/Tokyo'
+                        });
+                    }
+                },
+                {
+                    orderable: false,
+                    data: 'admin_user_id',
+                    name: 'admin_user_id',
+                    render: function(data, type, row) {
+                        const actions =
+                            `<div class="dt-actions ${row.is_butterflydance_user ? "is_butterflydance_user": ""}">
                                 <div class="d-flex gap-2">
                                     <a href="/manager/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
                                         <span>編集</span>
@@ -207,12 +215,13 @@
                                     </button>
                                 </div>
                             </div>`;
-                    return actions;
+                        return actions;
+                    }
                 }
-            }
             ]
         });
 
+        //Handle search button click
         $('.dt-search>label').on('click', (event) => {
             const keyword = $('#dt-search-0').val();
             table.search(keyword).draw();

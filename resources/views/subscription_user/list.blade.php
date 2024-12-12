@@ -223,6 +223,7 @@
             ]
         });
 
+        //Handle search button click
         $('.dt-search>label').on('click', (event) => {
             const keyword = $('#dt-search-0').val();
             table.search(keyword).draw();

@@ -13,7 +13,7 @@ use App\Http\Requests\UpdateManagerForm;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Auth;
 
 class ManagerController extends Controller
 {
@@ -41,6 +41,7 @@ class ManagerController extends Controller
             ['title' => 'ダッシュボード', 'url' => '/home', 'active' => false],
             ['title' => '管理者', 'url' => '/manager/list', 'active' => true],
         ];
+
 
         return view('manager.list', compact('breadcrumbs'));
     }
@@ -90,7 +91,7 @@ class ManagerController extends Controller
             $validator->validate($formData);
 
             $avatarPath = 'uploads/avatar/defaut-user.png';
-            if($formData['avatar_data'] != null) {
+            if ($formData['avatar_data'] != null) {
                 $avatarPath = $this->saveImageToFolder($formData['name'], $formData['avatar_data']);
             }
 
@@ -114,14 +115,15 @@ class ManagerController extends Controller
         }
     }
     /* Save $base64Iamge to folder */
-    public function saveImageToFolder(string $username, string $base64Image) {
+    public function saveImageToFolder(string $username, string $base64Image)
+    {
         preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type);
         $type = strtolower($type[1]); // Get extension file
 
         $base64Image = preg_replace('/^data:image\/\w+;base64,/', '', $base64Image);
         $base64Image = str_replace(' ', '+', $base64Image);
 
-        $fileName = $username.uniqid() . '.' . $type; // Create unique file name
+        $fileName = $username . uniqid() . '.' . $type; // Create unique file name
         $filePath = "uploads/avatars/$fileName";
         Storage::disk('public')->put($filePath, base64_decode($base64Image));
         return $filePath;
@@ -139,6 +141,7 @@ class ManagerController extends Controller
             'admin_users.admin_user_id',
             'admin_users.name',
             'admin_users.email',
+            'admin_users.avatar',
             'admin_users.created_at',
             'admin_users.updated_at',
             'subscription_users.subscription_user_id',
@@ -161,7 +164,8 @@ class ManagerController extends Controller
     /* (API) PATCH Method: Update manager */
     public function update(Request $request, $id)
     {
-        $formData = $request->only('subscription_user', 'name', 'password', 'confirm_password', 'chk_change_password');
+        $formData = $request
+            ->only('subscription_user', 'name', 'password', 'confirm_password', 'chk_change_password', 'avatar_data');
         try {
             $adminUser = AdminUser::findOrFail($id);
             if (!empty($formData['chk_change_password']) && $formData['chk_change_password'] === 'true') {
@@ -178,6 +182,14 @@ class ManagerController extends Controller
             }
             if ($formData['name'] == null) {
                 return response()->json(['name' => ['必須フィールドに入力してください']], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $avatarPath = null;
+            if ($formData['avatar_data'] != null) {
+                $avatarPath = $this->saveImageToFolder($formData['name'], $formData['avatar_data']);
+                $adminUser->update([
+                    'avatar' => $avatarPath
+                ]);
             }
 
             $adminUser->update([
@@ -200,6 +212,7 @@ class ManagerController extends Controller
                     'admin_users.admin_user_id',
                     'admin_users.name',
                     'admin_users.email',
+                    'admin_users.is_butterflydance_user',
                     'admin_users.created_at',
                     'admin_users.updated_at',
                     'subscription_users.company_name',

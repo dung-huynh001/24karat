@@ -113,12 +113,6 @@
                     <i class="fa-solid fa-plus p-0 m-0"></i>
                 </span>
             </button>
-            <button id="btn_test_submit" type="button" class="btn btn-danger d-flex align-items-center">
-                <span>登録</span>
-                <span class="ms-2 square-8 rounded-circle bg-white fs-9 text-royal-blue d-inline-flex justify-content-center align-items-center">
-                    <i class="fa-solid fa-plus p-0 m-0"></i>
-                </span>
-            </button>
         </div>
     </form>
 </div>
@@ -169,7 +163,7 @@
             resetAvatar();
         });
 
-        // Lưu ảnh đã cắt
+        // Save cropped image
         $('#saveCrop').on('click', () => {
             croppieInstance.result({
                 type: 'base64', // Return result like base64
@@ -264,30 +258,14 @@
         });
     });
 
-    // function getFormFields() {
-    //     const subscription_user = $('#subscription_user').val();
-    //     const name = $('#name').val();
-    //     const email = $('#email').val();
-    //     const password = $('#password').val();
-    //     const confirm_password = $('#confirm_password').val();
-
-    //     const formFields = {
-    //         "subscription_user": subscription_user,
-    //         "name": name,
-    //         "email": email,
-    //         "password": password,
-    //         "confirm_password": confirm_password,
-    //     }
-
-    //     return formFields;
-    // }
-
     $("#btn_test_submit").on('click', function(event) {
         getFormFields();
     });
 
     function getFormFields() {
         const formData = {};
+        const subscription_user = $('#subscription_user').val();
+        formData['subscription_user'] = subscription_user;
         $('#managerForm')
             .serializeArray()
             .forEach((field) => {

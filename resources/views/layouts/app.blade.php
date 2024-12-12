@@ -73,8 +73,10 @@
                                 aria-haspopup="true" aria-expanded="false" v-pre>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fs-1">
-                                        <img class="rounded-circle" src="{{$avatarUrl ?? asset('/assets/images/default-user.png')}}"
-                                            alt="user-img" style="width: 45px">
+                                        @auth
+                                            <img src="{{asset(Auth::user()->getAvatarUrl()) ?? asset('/assets/images/default-user.png') }}"
+                                                alt="avatar image" style="width: 45px">
+                                        @endauth
                                     </span>
                                     <div class="d-flex flex-column">
                                         <span class="text-muted fw-light" style="font-size: .67rem">ようこそ</span>

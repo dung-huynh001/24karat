@@ -28,12 +28,6 @@ class HomeController extends Controller
         $breadcrumbs = [
             ['title' => 'ダッシュボード', 'url' => '/dashboard', 'active' => true],
         ];
-        $user = Auth::user();
-        if ($user instanceof AdminUser) {
-            $avatarUrl = $user->getAvatarUrl();
-        } else {
-            $avatarUrl = asset('/assets/images/default-avatar.png');
-        }
-        return view('home', compact('breadcrumbs', 'avatarUrl'));
+        return view('home', compact('breadcrumbs'));
     }
 }

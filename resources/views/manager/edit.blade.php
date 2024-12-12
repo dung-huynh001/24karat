@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<link rel="stylesheet" href="{{ asset('/assets/lib/croppie-2.6.5/croppie.min.css') }}" />
 <div class="container-fluid">
     <form id="managerForm" method="PATCH" class="py-3">
         {{csrf_field()}}
@@ -16,11 +17,11 @@
                 <select class="form-select" id="subscription_user" name="subscription_user" aria-label="契約ユーザー">
                     <option value="" disabled selected>--選択--</option>
                     @foreach ($subscriptionUsers as $subscriptionUser)
-                        <option value="{{$subscriptionUser['subscription_user_id']}}"
-                            @if($manager['subscription_user_id'] == $subscriptionUser['subscription_user_id']) selected
-                            @endif>
-                            {{$subscriptionUser['company_name']}}
-                        </option>
+                    <option value="{{$subscriptionUser['subscription_user_id']}}"
+                        @if($manager['subscription_user_id']==$subscriptionUser['subscription_user_id']) selected
+                        @endif>
+                        {{$subscriptionUser['company_name']}}
+                    </option>
                     @endforeach
                 </select>
                 <div id="subscription_user-validate" class="text-sunset-orange"></div>
@@ -78,6 +79,42 @@
                 <div id="confirm_password-validate" class="text-sunset-orange"></div>
             </div>
         </div>
+        <div class="mb-3 row">
+            <label for="avatar" class="col-sm-2 col-form-label">アバター</label>
+            <div class="col-sm-10">
+                <input type="file" id="avatar" name="avatar" class="form-control" accept="image/*">
+                <!-- Input contain Data to send to server -->
+                <input type="hidden" id="avatar_data" name="avatar_data">
+                <div id="avatar-validate" class="text-sunset-orange"></div>
+            </div>
+        </div>
+
+        <!-- Modal Croppie -->
+        <div id="cropModal" class="modal croppie-modal" tabindex="-1" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div id="croppieContainer" style="width: 100%; height: 300px;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancelCrop">キャンセル</button>
+                        <button type="button" class="btn btn-primary" id="saveCrop">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Avatar -->
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div id="avatarPreview" class="border p-2" style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden;">
+                    <img id="avatarPreviewImg"
+                        src="{{asset($manager->avatar ? 'storage/'.$manager->avatar  : '/assets/images/default-user.png')}}"
+                        alt="Avatar Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+        </div>
         <div class="d-flex gap-2 justify-content-center">
             <a id="btn_cancel" href="{{route("manager.list")}}" type="button"
                 class="btn btn-lavender d-flex align-items-center shadow-sm">
@@ -97,8 +134,75 @@
 </div>
 @include('partials.select2')
 @include('partials.form')
+<script src="{{ asset('/assets/lib/croppie-2.6.5/croppie.min.js') }}"></script>
 <script>
     $(document).ready(() => {
+        let croppieInstance;
+
+        $('#avatar').on('click', (e) => {
+            resetAvatar();
+        });
+
+        $('#avatar').on('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    $('#cropModal').show();
+                    croppieInstance = new Croppie(document.getElementById('croppieContainer'), {
+                        viewport: {
+                            width: 150,
+                            height: 150,
+                            type: 'circle'
+                        },
+                        boundary: {
+                            width: 300,
+                            height: 300
+                        },
+                        showZoomer: true,
+                    });
+                    croppieInstance.bind({
+                        url: event.target.result,
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Cancel
+        $('#cancelCrop').on('click', () => {
+            $('#cropModal').hide();
+            croppieInstance.destroy();
+            const val = $('#avatar').val();
+            resetAvatar();
+        });
+
+        // Save cropped image
+        $('#saveCrop').on('click', () => {
+            croppieInstance.result({
+                type: 'base64', // Return result like base64
+                size: 'viewport',
+            }).then((base64) => {
+                // Show preview
+                $('#avatarPreviewImg').attr('src', base64);
+
+                // Assign base64 image to hidden input to send to server
+                $('#avatar_data').val(base64);
+                $('#cropModal').hide();
+                croppieInstance.destroy();
+            });
+        });
+
+        function resetAvatar() {
+            $('#avatar').val(null);
+            $('#avatarPreviewImg')
+                .attr(
+                    'src',
+                    "{{asset($manager->avatar ? 'storage/'.$manager->avatar : '/assets/images/default-user.png')}}"
+                );
+        }
+
+
         $('input').on('input', (event) => {
             const inputId = event.target.id;
             if (inputId) {
@@ -190,23 +294,16 @@
     });
 
     function getFormFields() {
+        const formData = {};
         const subscription_user = $('#subscription_user').val();
-        const name = $('#name').val();
-        const email = $('#email').val();
-        const password = $('#password').val();
-        const confirm_password = $('#confirm_password').val();
-        const chk_change_password = $('#chk_change_password').is(':checked');
-
-        const formFields = {
-            "subscription_user": subscription_user,
-            "name": name,
-            "email": email,
-            "password": password,
-            "confirm_password": confirm_password,
-            "chk_change_password": chk_change_password,
-        }
-
-        return formFields;
+        formData['subscription_user'] = subscription_user;
+        $('#managerForm')
+            .serializeArray()
+            .forEach((field) => {
+                formData[field.name] = field.value;
+            });
+        console.log(formData);
+        return formData;
     }
 
     function disabledFormBtns() {

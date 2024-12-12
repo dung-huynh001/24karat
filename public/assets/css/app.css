@@ -69,6 +69,10 @@ table.fixedHeader-locked {
         display: block;
     }
 
+    table.dataTable tbody tr:hover td .dt-actions.is_butterflydance_user {
+        display: none;
+    }
+
     .dt-actions {
         display: none;
         position: absolute;
