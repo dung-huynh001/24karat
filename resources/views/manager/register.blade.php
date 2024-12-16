@@ -169,6 +169,7 @@
                 type: 'base64', // Return result like base64
                 size: 'viewport',
             }).then((base64) => {
+                console.log("hello")
                 // Show preview
                 $('#avatarPreviewImg').attr('src', base64);
 
@@ -181,6 +182,7 @@
 
         function resetAvatar() {
             $('#avatar').val(null);
+            $('#avatar_data').val(null);
             $('#avatarPreviewImg').attr('src', "{{url('/assets/images/default-user.png')}}");
         }
 

@@ -7,8 +7,6 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use App\Models\AdminUser;
-use Illuminate\Support\Facades\Hash;
-
 class LoginController extends Controller
 {
     /*
@@ -64,8 +62,13 @@ class LoginController extends Controller
         //Login fails if user is delete_flag == 1
         $user = AdminUser::where('email', $request->input('email'))->first();
         if ($user && $user->delete_flag == 1) {
+            if($user->is_butterflydance_user != 1) {
+                return $this->send403Response($request);
+            }
             return $this->sendDisabledAccountResponse($request);
         }
+
+        
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -100,6 +103,14 @@ class LoginController extends Controller
         toastr()->warning('このアカウントは無効になっています。')->setTitle('ログイン失敗');
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.disabled')],
+        ]);
+    }
+
+    protected function send403Response(Request $request)
+    {
+        toastr()->warning('このユーザーは存在しません。')->setTitle('ログイン失敗');
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.denied')],
         ]);
     }
 
