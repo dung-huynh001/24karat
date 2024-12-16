@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -17,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('member_field_id');
             $table->longText('field_config')->nullable();
             $table->tinyInteger('is_display')->default(0);
-            $table->tinyInteger('delete_flag')->default(0);
             $table->timestamps();
 
             // Set foreign key for subscription_user_form_fields table
@@ -32,6 +32,8 @@ return new class extends Migration
                 ->on('member_fields')
                 ->onDelete('set null');
         });
+
+        DB::statement('ALTER TABLE subscription_user_form_fields ADD SYSTEM VERSIONING');
     }
 
     /**
@@ -40,6 +42,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('subscription_user_form_fields');
+        DB::statement('ALTER TABLE subscription_user_form_fields DROP SYSTEM VERSIONING');
         Schema::table('subscription_user_form_fields', function (Blueprint $table) {
             $table->dropForeign(['subscription_user_form_id', 'member_field_id']);
         });
