@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('member_fields', function (Blueprint $table) {
-            $$table->bigIncrements('id')->unsigned()->primary();
+            $table->bigIncrements('id')->primary();
             $table->unsignedBigInteger('member_field_format_trn_id')->nullable();
             $table->string('field_name', 191);
             $table->longText('field_value')->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
                   ->onDelete('set null');
         });
 
-        DB::statement('ALTER TABLE member_fields ADD SYSTEM VERSIONING');
+        DB::statement('ALTER TABLE member_fields WITH SYSTEM VERSIONING');
     }
 
     /**

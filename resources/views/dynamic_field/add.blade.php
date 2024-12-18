@@ -5,36 +5,36 @@
     <form id="subscriptionUserForm" class="py-3">
         {{csrf_field()}}
         <div class="mb-4 row">
-            <label for="company_name" class="col-sm-2 col-form-label">契約ユーザー名 <span
+            <label for="company_name" class="col-sm-2 col-form-label">フィールド名 <span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
-                <input type="text" id="company_name" name="company_name" class="form-control"
-                    value="{{$subscriptionUser->company_name}}" autocomplete="off">
+                <input type="text" id="company_name" name="company_name" class="form-control" autocomplete="off">
                 <div id="company_name-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-4 row">
-            <label for="sub_domain" class="col-sm-2 col-form-label">サブドメイン <span
+            <label for="sub_domain" class="col-sm-2 col-form-label">コントロールタイプ <span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" id="sub_domain" name="sub_domain" class="form-control"
-                        value="{{$subscriptionUser->sub_domain}}" autocomplete="off">
+                    <input type="text" id="sub_domain" name="sub_domain" class="form-control" autocomplete="off">
                     <span class="input-group-text">{{ env('APP_URL') }}</span>
                 </div>
                 <div id="sub_domain-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-4 row">
-            <label for="barcode_type" class="col-sm-2 col-form-label">バーコード種類 <span
+            <label class="col-sm-2 col-form-label">フィールドのフォーマット <span
+                    class="text-sunset-orange">*</span></label>
+        </div>
+        <div class="mb-4 row">
+            <label for="barcode_type" class="col-sm-2 col-form-label">フィールドのフォーマット <span
                     class="text-sunset-orange">*</span></label>
             <div class="col-sm-10">
                 <select id="barcode_type" name="barcode_type" class="form-select" aria-label="契約ユーザー">
-                    <option value="" disabled {{empty($subscriptionUser->barcode_type) ? 'selected' : ''}}>--選択--
-                    </option>
+                    <option value="" disabled selected>--選択--</option>
                     @foreach ($barcodeOptions as $value => $label)
-                        <option value="{{$value}}" {{$subscriptionUser->barcode_type == $value ? 'selected' : ''}}>{{$label}}
-                        </option>
+                        <option value="{{$value}}">{{$label}}</option>
                     @endforeach
                 </select>
                 <div id="barcode_type-validate" class="text-sunset-orange"></div>
@@ -44,10 +44,9 @@
             <label for="pref_id" class="col-sm-2 col-form-label">都道府県</label>
             <div class="col-sm-10">
                 <select id="pref_id" name="pref_id" class="form-select" aria-label="契約ユーザー">
-                    <option value="" disabled {{empty($subscriptionUser->pref_id) ? 'selected' : ''}}>--選択--</option>
+                    <option value="" disabled selected>--選択--</option>
                     @foreach ($prefectures as $prefecture)
-                        <option value="{{$prefecture->id}}" {{$subscriptionUser->pref_id == $value ? 'selected' : ''}}>
-                            {{$prefecture->name}}</option>
+                        <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
                     @endforeach
                 </select>
                 <div id="pref_id-validate" class="text-sunset-orange"></div>
@@ -59,10 +58,8 @@
             <div class="col-sm-6">
                 <div class="input-group gap-2">
                     <input id="first_zip" name="first_zip" type="text" maxlength="3" class="form-control text-center"
-                        value="{{substr($subscriptionUser->zip, 0, strpos($subscriptionUser->zip, '-'))}}"
                         autocomplete="off" onkeypress="return typingNumber(event)">
                     <input id="last_zip" name="last_zip" type="text" maxlength="4" class="form-control text-center"
-                        value="{{substr($subscriptionUser->zip, strrpos($subscriptionUser->zip, '-') + 1)}}"
                         autocomplete="off" onkeypress="return typingNumber(event)">
                     <button type="button" class="btn btn-danger" onclick="autoFillAddress1()">自動入力</button>
                 </div>
@@ -73,8 +70,7 @@
         <div class="mb-4 row">
             <label for="address1" class="col-sm-2 col-form-label">住所1</label>
             <div class="col-sm-10">
-                <input type="text" id="address1" name="address1" class="form-control"
-                    value="{{ $subscriptionUser->address1 }}" autocomplete="off">
+                <input type="text" id="address1" name="address1" class="form-control" autocomplete="off">
                 <div id="address1-validate" class="text-sunset-orange"></div>
             </div>
         </div>
@@ -82,8 +78,7 @@
         <div class="mb-4 row">
             <label for="address2" class="col-sm-2 col-form-label">住所2</label>
             <div class="col-sm-10">
-                <input type="text" id="address2" name="address2" class="form-control"
-                    value="{{ $subscriptionUser->address2 }}" autocomplete="off">
+                <input type="text" id="address2" name="address2" class="form-control" autocomplete="off">
                 <div id="address2-validate" class="text-sunset-orange"></div>
             </div>
         </div>
@@ -93,14 +88,11 @@
             <div class="col-sm-8">
                 <div class="input-group gap-2">
                     <input id="first_tel" name="first_tel" type="text" maxlength="3" class="form-control text-center"
-                        value="{{substr($subscriptionUser->tel, 0, 3)}}" autocomplete="off"
-                        onkeypress="return typingNumber(event)">
+                        autocomplete="off" onkeypress="return typingNumber(event)">
                     <input id="second_tel" name="second_tel" type="text" maxlength="3" class="form-control text-center"
-                        value="{{substr($subscriptionUser->tel, 3, 3)}}" autocomplete="off"
-                        onkeypress="return typingNumber(event)">
+                        autocomplete="off" onkeypress="return typingNumber(event)">
                     <input id="last_tel" name="last_tel" type="text" maxlength="4" class="form-control text-center"
-                        value="{{substr($subscriptionUser->tel, 6, 4)}}" autocomplete="off"
-                        onkeypress="return typingNumber(event)">
+                        autocomplete="off" onkeypress="return typingNumber(event)">
                 </div>
                 <div id="tel-validate" class="text-sunset-orange"></div>
             </div>
@@ -109,8 +101,7 @@
         <div class="mb-4 row">
             <label for="manager_mail" class="col-sm-2 col-form-label">担当者メールアドレス</label>
             <div class="col-sm-10">
-                <input id="manager_mail" name="manager_mail" class="form-control"
-                    value="{{$subscriptionUser->manager_mail}}" autocomplete="off">
+                <input id="manager_mail" name="manager_mail" class="form-control" autocomplete="off">
                 <div id="manager_mail-validate" class="text-sunset-orange"></div>
             </div>
         </div>
@@ -125,8 +116,9 @@
             </a>
             <button id="btn_submit" type="submit" class="btn btn-royal-blue d-flex align-items-center">
                 <span>登録</span>
-                <span class="ms-2 fs-7 d-inline-flex justify-content-center align-items-center">
-                    <i class="fa-solid fa-floppy-disk p-0 m-0"></i>
+                <span
+                    class="ms-2 square-8 rounded-circle bg-white fs-9 text-royal-blue d-inline-flex justify-content-center align-items-center">
+                    <i class="fa-solid fa-plus p-0 m-0"></i>
                 </span>
             </button>
         </div>
@@ -156,6 +148,7 @@
         });
     }
 
+
     $(document).ready(() => {
         $('input').on('input', (event) => {
             const inputId = event.target.id;
@@ -180,8 +173,8 @@
             const currentUrl = window.location.href;
             const subscriptionUserId = currentUrl.split('/').pop();
             $.ajax({
-                type: 'PATCH',
-                url: `/subscription_user/update/${subscriptionUserId}`,
+                type: 'POST',
+                url: `/subscription_user/create`,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -191,7 +184,7 @@
                 },
                 success: (response) => {
                     if (response == "200") {
-                        localStorage.setItem('update-success', 'true');
+                        localStorage.setItem('create-success', 'true');
                         window.location.assign('/subscription_user/list');
                         clearValidate();
                         clearForm();
@@ -253,11 +246,15 @@
     }
 
     function clearForm() {
-        $('#subscription_user').val('');
-        $('#name').val('');
-        $('#email').val('');
-        $('#password').val('');
-        $('#confirm_password').val('');
+        $('#company_name').val('');
+        $('#sub_domain').val('');
+        $('#barcode_type').val('');
+        $('#pref_id').val('');
+        $('#zip').val('');
+        $('#address1').val('');
+        $('#address2').val('');
+        $('#tel').val('');
+        $('#manager_mail').val('');
     }
 
 

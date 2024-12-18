@@ -2,7 +2,7 @@
 @extends('layouts.breadcrumb')
 @section('content')
 <div class="mb-4">
-    <a role="button" href="{{route("subscription_user.add")}}" class="btn btn-royal-blue">契約ユーザー登録</a>
+    <a role="button" href="{{route("dynamic_field.add")}}" class="btn btn-royal-blue">フィールド登録</a>
 </div>
 
 <div class="table-responsive">
@@ -140,7 +140,7 @@
             }
             ],
             order: [1, 'asc'],
-            ajax: "{{ url('/subscription_user/get-subscription_users') }}",
+            ajax: "{{ url('/dynamic_field/get-dynamic_fields') }}",
             columns: [{
                 className: 'dtr-control',
                 orderable: false,

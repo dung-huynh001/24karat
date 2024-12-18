@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subscription_user_form_fields', function (Blueprint $table) {
-            $table->bigIncrements('subscription_user_form_field_id')->unsigned()->primary();
+            $table->bigIncrements('subscription_user_form_field_id')->primary();
             $table->unsignedBigInteger('subscription_user_form_id');
             $table->unsignedBigInteger('member_field_id');
             $table->longText('field_config')->nullable();
@@ -24,16 +24,16 @@ return new class extends Migration
             $table->foreign('subscription_user_form_id')
                 ->references('subscription_user_form_id')
                 ->on('subscription_user_forms')
-                ->onDelete('set null');
+                ->onDelete('cascade');
 
             // Set foreign key for subscription_user_form_fields table
             $table->foreign('member_field_id')
-                ->references('member_field_id')
+                ->references('id')
                 ->on('member_fields')
-                ->onDelete('set null');
+                ->onDelete('cascade');
         });
 
-        DB::statement('ALTER TABLE subscription_user_form_fields ADD SYSTEM VERSIONING');
+        DB::statement('ALTER TABLE subscription_user_form_fields WITH SYSTEM VERSIONING');
     }
 
     /**

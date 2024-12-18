@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('member_field_format_trns', function (Blueprint $table) {
-            $table->bigIncrements('member_field_format_trn_id')->unsigned()->primary();
+            $table->bigIncrements('member_field_format_trn_id')->primary();
             $table->unsignedBigInteger('member_field_format_master_id');
             $table->string('member_field_format_trn_name', 100)->nullable();
             $table->string('member_field_format_trn_value', 50);
@@ -23,10 +23,10 @@ return new class extends Migration
             $table->foreign('member_field_format_master_id')
                   ->references('member_field_format_master_id')
                   ->on('member_field_format_masters')
-                  ->onDelete('set null'); 
+                  ->onDelete('cascade'); 
         });
 
-        DB::statement('ALTER TABLE member_field_format_trns ADD SYSTEM VERSIONING');
+        DB::statement('ALTER TABLE member_field_format_trns WITH SYSTEM VERSIONING');
     }
 
     /**

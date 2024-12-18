@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.breadcrumb')
 @section('content')
 
 <div class="mb-4">
