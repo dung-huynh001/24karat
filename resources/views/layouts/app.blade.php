@@ -114,7 +114,7 @@
             <ul class="navbar-nav me-auto gap-4 p-3 nav-list">
                 <li><a class="nav-link {{request()->is('manager/*') ? 'active' : ''}}" href="{{route('manager.list')}}">管理者</a></li>
                 <li><a class="nav-link {{request()->is('subscription_user/*') ? 'active' : ''}}" href="{{route('subscription_user.list')}}">契約ユーザー</a></li>
-                <li><a class="nav-link" href="">フィールド管理</a></li>
+                <li><a class="nav-link {{request()->is('dynamic_field/*') ? 'active' : ''}}" href="{{route('dynamic_field.list')}}">フィールド管理</a></li>
                 <li>
                     <a class="btn btn-danger w-100" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">
@@ -146,7 +146,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{route('manager.list')}}"><i
+                        <a class="nav-link {{request()->is('dynamic_field/*') ? 'active' : ''}}" href="{{route('dynamic_field.list')}}"><i
                                 class="fa-solid fa-table-list fs-8"></i>
                             <span>フィールド管理</span>
                         </a>

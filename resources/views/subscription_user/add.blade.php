@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.breadcrumb')
 @section('content')
 <div class="container-fluid">
     <form id="subscriptionUserForm" class="py-3">
