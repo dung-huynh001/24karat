@@ -135,7 +135,10 @@
                 {
                     title: 'No.',
                     data: 'admin_user_id',
-                    name: 'admin_user_id'
+                    name: 'admin_user_id',
+                    render: function(data, type, row) {
+                        return html = `<div class="text-center">${data}<div>`;
+                    }
                 },
                 {
                     title: '名前',

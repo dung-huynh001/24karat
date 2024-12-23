@@ -3,26 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
-class DynamicFields extends Model
+class MemberFieldFormatMasters extends Model
 {
-    use Notifiable;
-
+    use HasFactory;
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'member_fields';
+    protected $table = 'member_field_format_masters';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'member_field_format_master_id';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -51,18 +49,8 @@ class DynamicFields extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'sub_domain',
-        'barcode_type',
-        'company_name',
-        'zip',
-        'address1',
-        'address2',
-        'tel',
-        'manager_mail',
-        'pref_id',
-        'delete_flag',
-        'is_display_member_page',
-        'is_display_tempo_page',
+        'member_field_format_master_name',
+        'mode_display_option',
     ];
 
     /**
@@ -75,15 +63,4 @@ class DynamicFields extends Model
     //     'created_at',
     //     'updated_at',
     // ];
-
-    /**
-     * Relationship with the Prefecture model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function prefecture()
-    {
-        return $this->belongsTo(Prefectures::class, 'pref_id');
-    }
-
 }

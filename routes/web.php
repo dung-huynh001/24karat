@@ -40,4 +40,6 @@ Route::post('/dynamic_field/create', [DynamicFieldController::class, 'create'])-
 Route::get('/dynamic_field/edit/{id}', [DynamicFieldController::class, 'edit'])->name('dynamic_field.edit');
 Route::patch('/dynamic_field/update/{id}', [DynamicFieldController::class, 'update'])->name('dynamic_field.update');
 Route::delete('/dynamic_field/delete/{id}', [DynamicFieldController::class, 'delete'])->name('dynamic_field.delete');
-Route::get('/dynamic_field/get-dynamic_fields', [DynamicFieldController::class, 'getFields'])->name('dynamic_field.get-dynamic_fields');
+Route::get('/dynamic_field/get-dynamic_fields', [DynamicFieldController::class, 'getMemberFields'])->name('dynamic_field.get-dynamic_fields');
+Route::get('/dynamic-field/get_dynamic_field_partial/{member_field_format_master_id}', [DynamicFieldController::class, 'getDynamicFieldPartial']);
+

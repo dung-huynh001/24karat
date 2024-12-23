@@ -47,6 +47,15 @@ div.dt-container .dt-search .dt-input:focus-visible {
     padding: 3px 16px;
     background-color: #f6f6f6;
 }
+
+.dataTable thead th {
+    text-align: center !important;
+}
+
+table.dataTable tbody tr:hover td .dt-actions.is_butterflydance_user {
+    display: none;
+}
+
 table.fixedHeader-floating,
 table.fixedHeader-locked {
     position: relative !important;
@@ -69,11 +78,9 @@ table.fixedHeader-locked {
         display: block;
     }
 
-    table.dataTable tbody tr:hover td .dt-actions.is_butterflydance_user {
-        display: none;
-    }
+    
 
-    .dt-actions {
+    /* .dt-actions {
         display: none;
         position: absolute;
         right: 0;
@@ -81,13 +88,17 @@ table.fixedHeader-locked {
         transform: translateY(-50%);
         padding: 3px 16px;
         background-color: #f6f6f6;
-    }
+    } */
 }
 
 @media (max-width: 767px) {
     .dt-actions {
         padding: 3px 8px;
         background-color: transparent;
+    }
+
+    table.dataTable tbody tr:hover td .dt-actions {
+        display: block;
     }
 }
 

@@ -6,7 +6,7 @@
 </div>
 
 <div class="table-responsive">
-    <table id="subscriptionUserTbl" class="display responsive">
+    <table id="memberFieldsTbl" class="display responsive">
         <thead>
             <tr></tr>
         </thead>
@@ -40,15 +40,15 @@
 
 <script>
     let deleteId;
-    $(document).ready(function () {
-        $(document).on('click', '.btn_delete', function (event) {
+    $(document).ready(function() {
+        $(document).on('click', '.btn_delete', function(event) {
             const btnId = $(this).data('id');
             deleteId = btnId;
             console.log(`Id bị xóa là: ${deleteId}`);
         });
 
 
-        $('#btn_delete_confirm').on('click', function (event) {
+        $('#btn_delete_confirm').on('click', function(event) {
             const urlDelete = `delete/${deleteId}`;
             $.ajax({
                 url: urlDelete,
@@ -59,14 +59,14 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
-                success: function (res) {
+                success: function(res) {
                     $('#deleteModal').modal('hide');
-                    $('#subscriptionUserTbl').DataTable().ajax.reload();
+                    $('#memberFieldsTbl').DataTable().ajax.reload();
                     showActionToast({
                         action: DELETED_ACTION
                     })
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     const errmsg = xhr.responseText;
                     $.toast({
                         heading: 'エラー',
@@ -79,7 +79,7 @@
             });
         });
 
-        const table = $('#subscriptionUserTbl').DataTable({
+        const table = $('#memberFieldsTbl').DataTable({
             processing: true,
             serverSide: true,
             colReorder: true,
@@ -117,94 +117,46 @@
                 bottomStart: '',
             },
             columnDefs: [{
-                className: 'dtr-control',
-                orderable: false,
-                targets: 0,
-                width: '8px',
-            },
-            {
-                responsivePriority: 1,
-                targets: 0
-            },
-            {
-                responsivePriority: 2,
-                targets: 1
-            },
-            {
-                responsivePriority: 3,
-                targets: 2
-            },
-            {
-                responsivePriority: 4,
-                targets: '_all'
-            }
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 0,
+                    width: '8px',
+                },
+                {
+                    targets: 1,
+                    responsivePriority: 2,
+                    width: '10%'
+                },
             ],
             order: [1, 'asc'],
             ajax: "{{ url('/dynamic_field/get-dynamic_fields') }}",
             columns: [{
-                className: 'dtr-control',
-                orderable: false,
-                targets: 0
-            },
-            {
-                title: 'No.',
-                data: 'subscription_user_id',
-                name: 'subscription_user_id'
-            },
-            {
-                title: 'サブドメイン',
-                data: 'sub_domain',
-                name: 'sub_domain',
-                render: function (data, type, row) {
-                    return `<a class="link-primary" target="_blank" href="${data}">${data}</a>`
-                }
-            },
-            {
-                title: 'バーコード種類',
-                data: 'barcode_type',
-                name: 'barcode_type'
-            },
-            {
-                title: '契約ユーザー',
-                data: 'company_name',
-                name: 'company_name'
-            },
-            {
-                title: '郵便番号',
-                data: 'zip',
-                name: 'zip'
-            },
-            {
-                title: '都道府県',
-                data: 'name',
-                name: 'name'
-            },
-            {
-                title: '更新日時',
-                data: 'updated_at',
-                name: 'updated_at',
-                render: function (data, type, row) {
-                    var date = new Date(data);
-                    return date.toLocaleDateString('ja-JP', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZone: 'Asia/Tokyo'
-                    });
-                }
-            },
-            {
-                orderable: false,
-                data: 'subscription_user_id',
-                name: 'subscription_user_id',
-                render: function (data, type, row) {
-                    var actions =
-                        `<div class="dt-actions">
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 0
+                },
+                {
+                    title: 'No.',
+                    data: 'id',
+                    name: 'member_field_id',
+                    render: function(data, type, row) {
+                        return html = `<div class="text-center">${data}<div>`;
+                    }
+                },
+                {
+                    title: 'フィールド名',
+                    data: 'field_name',
+                    name: 'field_name',
+                },
+                {
+                    orderable: false,
+                    data: 'id',
+                    name: 'member_field_id',
+                    render: function(data, type, row) {
+                        const actions =
+                            `<div class="dt-actions">
                                 <div class="d-flex gap-2">
-                                    <a href="/subscription_user/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
+                                    <a href="/dynamic_field/edit/${data}" class="btn btn-emerald fs-8 d-flex align-items-center">
                                         <span>編集</span>
                                         <span class="ms-1 square-9 rounded-circle bg-white fs-10 text-emerald d-inline-flex justify-content-center align-items-center">
                                             <i class="fa-solid fa-pen p-0 m-0"></i>
@@ -218,9 +170,9 @@
                                     </button>
                                 </div>
                             </div>`;
-                    return actions;
+                        return actions;
+                    }
                 }
-            }
             ]
         });
 

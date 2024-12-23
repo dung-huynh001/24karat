@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DynamicFields;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Log;
-use App\Http\Common\Constants;
-use App\Models\Prefectures;
+use App\Models\MemberFields;
+use App\Models\MemberFieldFormatMasters;
+use App\Models\MemberFieldFormatTrns;
 
 class DynamicFieldController extends Controller
 {
@@ -36,53 +36,29 @@ class DynamicFieldController extends Controller
             ['title' => 'フィールド登録', 'url' => '/dynamic_field/add', 'active' => true],
         ];
 
-        $barcodeOptions = Constants::BARCODE_OPTIONS;
-
-        $prefectures = Prefectures::select([
-            'id',
-            'code',
-            'name',
-        ])->get();
+        $fieldFormatMasters = MemberFieldFormatMasters::select([
+            'member_field_format_master_id',
+            'member_field_format_master_name',
+            'mode_display_option',
+        ])
+            ->get();
 
         return view('dynamic_field.add', [
             'breadcrumbs' => $breadcrumbs,
-            'barcodeOptions' => $barcodeOptions,
-            'prefectures' => $prefectures
+            'fieldFormatMasters' => $fieldFormatMasters,
         ]);
     }
 
-    /* (API) GET Method: Return subscription users as datatables response */
-    public function getFields()
+    /* (API) GET Method: Return member fields as datatables response */
+    public function getMemberFields()
     {
         try {
-            $managers = DynamicFields::select([
-                'subscription_users.subscription_user_id',
-                'subscription_users.sub_domain',
-                'subscription_users.barcode_type',
-                'subscription_users.company_name',
-                'subscription_users.zip',
-                'subscription_users.address1',
-                'subscription_users.address2',
-                'prefectures.name',
-                'subscription_users.tel',
-                'subscription_users.manager_mail',
-                'subscription_users.created_at',
-                'subscription_users.updated_at',
-            ])
-                ->leftJoin('prefectures', 'subscription_users.pref_id', '=', 'prefectures.id')
-                ->where('subscription_users.delete_flag', 0);
+            $managers = MemberFields::select([
+                'id',
+                'field_name',
+            ])->get();
 
-            $sub_domain = env('APP_URL');
-
-            return DataTables::of($managers)
-                ->editColumn('sub_domain', function ($manager) use ($sub_domain) {
-                    // Thực hiện thay đổi sub_domain
-                    return 'https://' . $manager->sub_domain . '.' . $sub_domain;
-                })
-                ->filterColumn('name', function ($query, $keyword) {
-                    $query->whereRaw('LOWER(prefectures.name) LIKE ?', ["%{$keyword}%"]);
-                })
-                ->make(true);
+            return DataTables::of($managers)->make(true);
         } catch (\Exception $e) {
             // Write log
             Log::error('Error fetching managers: ' . $e->getMessage());
@@ -97,4 +73,103 @@ class DynamicFieldController extends Controller
         }
     }
 
+    public function getDynamicFieldPartial($member_field_format_master_id)
+    {
+        $member_field_format_trns = null;
+        $partialView = '';
+        switch ($member_field_format_master_id) {
+            case 1:
+                $partialView = 'partials.dynamic_fields.textbox';
+                $member_field_format_trns = MemberFieldFormatTrns::select([
+                    'member_field_format_trn_id',
+                    'member_field_format_master_id',
+                    'member_field_format_trn_name',
+                    'member_field_format_trn_value',
+                ])
+                    ->where('member_field_format_master_id', '=', $member_field_format_master_id)
+                    ->get();
+                break;
+            case 2:
+                $partialView = 'partials.dynamic_fields.calendar';
+                break;
+            case 3:
+                $partialView = 'partials.dynamic_fields.radio';
+                break;
+            case 4:
+                $partialView = 'partials.dynamic_fields.select';
+                break;
+            case 5:
+                $partialView = 'partials.dynamic_fields.province';
+                break;
+            case 6:
+                $partialView = 'partials.dynamic_fields.postcode';
+                break;
+            case 7:
+                $partialView = 'partials.dynamic_fields.address';
+                break;
+            default:
+                break;
+        }
+
+        return view($partialView, [
+            'member_field_format_trns' => $member_field_format_trns
+        ])->render();
+    }
+
+    /* GET Method: Return edit member field view */
+    public function edit($id)
+    {
+        $breadcrumbs = [
+            ['title' => 'ダッシュボード', 'url' => '/home', 'active' => false],
+            ['title' => '契約ユーザー', 'url' => '/dynamic_field/list', 'active' => false],
+            ['title' => '契約ユーザー編集', 'url' => "/dynamic_field/edit/$id", 'active' => true],
+        ];
+
+        $memberFields = MemberFields::select([
+            'member_fields.id',
+            'member_fields.member_field_format_trn_id',
+            'member_field_format_trns.member_field_format_master_id',
+            'member_fields.field_name',
+            'member_fields.field_value',
+            'member_fields.field_validation',
+            'member_fields.field_config',
+            'member_fields.used_by',
+            'member_fields.csv_input_rule'
+        ])
+            ->leftJoin(
+                'member_field_format_trns',
+                'member_fields.member_field_format_trn_id',
+                '=',
+                'member_field_format_trns.member_field_format_trn_id'
+            )
+            ->where('id', $id)
+            ->first();
+
+        $fieldFormatMasters = MemberFieldFormatMasters::select([
+            'member_field_format_master_id',
+            'member_field_format_master_name',
+            'mode_display_option',
+        ])
+            ->get();
+
+        $fieldFormatTrns = MemberFieldFormatTrns::select([
+            'member_field_format_trn_id',
+            'member_field_format_master_id',
+            'member_field_format_trn_name',
+            'member_field_format_trn_value',
+        ])
+            ->where(
+                'member_field_format_master_id',
+                '=',
+                $memberFields->member_field_format_master_id
+            )
+            ->get();
+
+        return view('dynamic_field.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'memberFields' => $memberFields,
+            'fieldFormatMasters' => $fieldFormatMasters,
+            'fieldFormatTrns' => $fieldFormatTrns,
+        ]);
+    }
 }
