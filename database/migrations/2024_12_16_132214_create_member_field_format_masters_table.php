@@ -13,13 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('member_field_format_masters', function (Blueprint $table) {
-            $table->bigIncrements('member_field_format_master_id')->unsigned()->primary();
+            $table->bigIncrements('member_field_format_master_id')->primary();
             $table->string('member_field_format_master_name', 100);
             $table->string('mode_display_option', 100)->nullable();
             $table->timestamps();
         });
 
-        DB::statement('ALTER TABLE member_field_format_masters ADD SYSTEM VERSIONING');
+        DB::statement('ALTER TABLE member_field_format_masters WITH SYSTEM VERSIONING');
     }
 
     /**

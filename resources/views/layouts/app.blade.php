@@ -38,14 +38,14 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm p-0 m-0">
             <div class="container">
                 <a class="navbar-brand d-flex flex-column align-items-end" href="{{ url('/') }}">
-                    <img src="{{ asset('/assets/images/logo.webp') }}" alt="logo img"
-                        style="width: 160px; height: 60px; object-fit: cover;">
-                    <span class="d-flex justify-content-center align-items-center gap-1">
+                    <img src="{{ asset('/assets/images/logo.png') }}" alt="logo img"
+                        style="width: 120px; height: 80px; object-fit: contain;">
+                    <!-- <span class="d-flex justify-content-center align-items-center gap-1">
                         <span>
                             <i class="fa-regular fa-address-card fs-3"></i>
                         </span>
                         <span class="fw-bold">会員管理</span>
-                    </span>
+                    </span> -->
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -114,7 +114,7 @@
             <ul class="navbar-nav me-auto gap-4 p-3 nav-list">
                 <li><a class="nav-link {{request()->is('manager/*') ? 'active' : ''}}" href="{{route('manager.list')}}">管理者</a></li>
                 <li><a class="nav-link {{request()->is('subscription_user/*') ? 'active' : ''}}" href="{{route('subscription_user.list')}}">契約ユーザー</a></li>
-                <li><a class="nav-link" href="">フィールド管理</a></li>
+                <li><a class="nav-link {{request()->is('dynamic_field/*') ? 'active' : ''}}" href="{{route('dynamic_field.list')}}">フィールド管理</a></li>
                 <li>
                     <a class="btn btn-danger w-100" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">
@@ -146,7 +146,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{route('manager.list')}}"><i
+                        <a class="nav-link {{request()->is('dynamic_field/*') ? 'active' : ''}}" href="{{route('dynamic_field.list')}}"><i
                                 class="fa-solid fa-table-list fs-8"></i>
                             <span>フィールド管理</span>
                         </a>

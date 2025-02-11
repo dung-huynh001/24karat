@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.breadcrumb')
 @section('content')
 <link rel="stylesheet" href="{{ asset('/assets/lib/croppie-2.6.5/croppie.min.css') }}" />
 <div class="container-fluid">

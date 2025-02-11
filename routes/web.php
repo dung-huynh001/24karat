@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DynamicFieldController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\HomeController;
@@ -31,3 +32,14 @@ Route::patch('/subscription_user/update/{id}', [SubscriptionUserController::clas
 Route::delete('/subscription_user/delete/{id}', [SubscriptionUserController::class, 'delete'])->name('subscription_user.delete');
 Route::get('/subscription_user/get-subscription_users', [SubscriptionUserController::class, 'getSubscriptionUsers'])->name('subscription_user.get-subscription_users');
 Route::get('/subscription_user/autofill_address1/{code}', [SubscriptionUserController::class, 'autoFillAddress1'])->name('subscription_user.autofill_address1');
+
+
+Route::get('/dynamic_field/list', [DynamicFieldController::class, 'index'])->name('dynamic_field.list');
+Route::get('/dynamic_field/add', [DynamicFieldController::class, 'add'])->name('dynamic_field.add');
+Route::post('/dynamic_field/create', [DynamicFieldController::class, 'create'])->name('dynamic_field.create');
+Route::get('/dynamic_field/edit/{id}', [DynamicFieldController::class, 'edit'])->name('dynamic_field.edit');
+Route::patch('/dynamic_field/update/{id}', [DynamicFieldController::class, 'update'])->name('dynamic_field.update');
+Route::delete('/dynamic_field/delete/{id}', [DynamicFieldController::class, 'delete'])->name('dynamic_field.delete');
+Route::get('/dynamic_field/get-dynamic_fields', [DynamicFieldController::class, 'getMemberFields'])->name('dynamic_field.get-dynamic_fields');
+Route::get('/dynamic-field/get_dynamic_field_partial/{member_field_format_master_id}', [DynamicFieldController::class, 'getDynamicFieldPartial']);
+

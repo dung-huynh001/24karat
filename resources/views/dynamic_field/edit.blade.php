@@ -5,100 +5,40 @@
     <form id="subscriptionUserForm" class="py-3">
         {{csrf_field()}}
         <div class="mb-4 row">
-            <label for="company_name" class="col-sm-2 col-form-label">契約ユーザー名 <span
+            <label for="field_name" class="col-sm-3 col-form-label">フィールド名 <span
                     class="text-sunset-orange">*</span></label>
-            <div class="col-sm-10">
-                <input type="text" id="company_name" name="company_name" class="form-control" autocomplete="off">
-                <div id="company_name-validate" class="text-sunset-orange"></div>
+            <div class="col-sm-9">
+                <input type="text" id="field_name" name="field_name" class="form-control" value="{{$memberFields->field_name}}" autocomplete="off">
+                <div id="field_name-validate" class="text-sunset-orange"></div>
             </div>
         </div>
         <div class="mb-4 row">
-            <label for="sub_domain" class="col-sm-2 col-form-label">サブドメイン <span
+            <label for="sub_domain" class="col-sm-3 col-form-label">コントロールタイプ <span
                     class="text-sunset-orange">*</span></label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="text" id="sub_domain" name="sub_domain" class="form-control" autocomplete="off">
-                    <span class="input-group-text">{{ env('APP_URL') }}</span>
-                </div>
-                <div id="sub_domain-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
-        <div class="mb-4 row">
-            <label for="barcode_type" class="col-sm-2 col-form-label">バーコード種類 <span
-                    class="text-sunset-orange">*</span></label>
-            <div class="col-sm-10">
-                <select id="barcode_type" name="barcode_type" class="form-select" aria-label="契約ユーザー">
-                    <option value="" disabled selected>--選択--</option>
-                    @foreach ($barcodeOptions as $value => $label)
-                        <option value="{{$value}}">{{$label}}</option>
+            <div class="col-sm-9">
+                <select id="member_field_format_master_id" name="member_field_format_master_id" class="form-select" aria-label="契約ユーザー">
+                    <option value="" disabled {{empty($memberFields->member_field_format_master_id) ? 'selected' : ''}}>--選択--
+                    </option>
+                    @foreach ($fieldFormatMasters as $fieldFormatMaster)
+                    <option
+                        value="{{ $fieldFormatMaster->member_field_format_master_id }}"
+                        {{ $memberFields->member_field_format_master_id == $fieldFormatMaster->member_field_format_master_id ? 'selected' : '' }}>
+                        {{ $fieldFormatMaster->member_field_format_master_name }}
+                    </option>
                     @endforeach
                 </select>
-                <div id="barcode_type-validate" class="text-sunset-orange"></div>
+                <div id="" class="text-sunset-orange"></div>
             </div>
         </div>
-        <div class="mb-4 row">
-            <label for="pref_id" class="col-sm-2 col-form-label">都道府県</label>
-            <div class="col-sm-10">
-                <select id="pref_id" name="pref_id" class="form-select" aria-label="契約ユーザー">
-                    <option value="" disabled selected>--選択--</option>
-                    @foreach ($prefectures as $prefecture)
-                        <option value="{{$prefecture->id}}">{{$prefecture->name}}</option>
-                    @endforeach
-                </select>
-                <div id="pref_id-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
+        @if ($memberFields->member_field_format_trn_id != null)
+        @include('partials.dynamic_fields.textbox')
+        @endif
 
         <div class="mb-4 row">
-            <label for="first_zip" class="col-sm-2 col-form-label">郵便番号</label>
-            <div class="col-sm-6">
-                <div class="input-group gap-2">
-                    <input id="first_zip" name="first_zip" type="text" maxlength="3" class="form-control text-center"
-                        autocomplete="off" onkeypress="return typingNumber(event)">
-                    <input id="last_zip" name="last_zip" type="text" maxlength="4" class="form-control text-center"
-                        autocomplete="off" onkeypress="return typingNumber(event)">
-                    <button type="button" class="btn btn-danger" onclick="autoFillAddress1()">自動入力</button>
-                </div>
-                <div id="zip-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
-
-        <div class="mb-4 row">
-            <label for="address1" class="col-sm-2 col-form-label">住所1</label>
-            <div class="col-sm-10">
-                <input type="text" id="address1" name="address1" class="form-control" autocomplete="off">
-                <div id="address1-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
-
-        <div class="mb-4 row">
-            <label for="address2" class="col-sm-2 col-form-label">住所2</label>
-            <div class="col-sm-10">
-                <input type="text" id="address2" name="address2" class="form-control" autocomplete="off">
-                <div id="address2-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
-
-        <div class="mb-4 row">
-            <label for="first_tel" class="col-sm-2 col-form-label">電話番号</label>
-            <div class="col-sm-8">
-                <div class="input-group gap-2">
-                    <input id="first_tel" name="first_tel" type="text" maxlength="3" class="form-control text-center"
-                        autocomplete="off" onkeypress="return typingNumber(event)">
-                    <input id="second_tel" name="second_tel" type="text" maxlength="3" class="form-control text-center"
-                        autocomplete="off" onkeypress="return typingNumber(event)">
-                    <input id="last_tel" name="last_tel" type="text" maxlength="4" class="form-control text-center"
-                        autocomplete="off" onkeypress="return typingNumber(event)">
-                </div>
-                <div id="tel-validate" class="text-sunset-orange"></div>
-            </div>
-        </div>
-
-        <div class="mb-4 row">
-            <label for="manager_mail" class="col-sm-2 col-form-label">担当者メールアドレス</label>
-            <div class="col-sm-10">
-                <input id="manager_mail" name="manager_mail" class="form-control" autocomplete="off">
-                <div id="manager_mail-validate" class="text-sunset-orange"></div>
+            <label for="" class="col-sm-3 col-form-label">CSVでの入力ルール</label>
+            <div class="col-sm-9">
+                <input type="text" id="" name="field_name" class="form-control" placeholder="テキストを入力してください。" autocomplete="off">
+                <div id="" class="text-sunset-orange"></div>
             </div>
         </div>
 
@@ -206,9 +146,9 @@
     });
 
     function getFormFields() {
-        const company_name = $('#company_name').val();
+        const field_name = $('#field_name').val();
         const sub_domain = $('#sub_domain').val();
-        const barcode_type = $('#barcode_type').val();
+        const member_field_format_master_id = $('#member_field_format_master_id').val();
         const pref_id = $('#pref_id').val();
         const zip = $('#first_zip').val() + '-' + $('#last_zip').val();
         const address1 = $('#address1').val();
@@ -217,9 +157,9 @@
         const manager_mail = $('#manager_mail').val();
 
         const formFields = {
-            "company_name": company_name,
+            "field_name": field_name,
             "sub_domain": sub_domain,
-            "barcode_type": barcode_type,
+            "member_field_format_master_id": member_field_format_master_id,
             "pref_id": pref_id,
             "zip": zip,
             "address1": address1,
@@ -242,9 +182,9 @@
     }
 
     function clearForm() {
-        $('#company_name').val('');
+        $('#field_name').val('');
         $('#sub_domain').val('');
-        $('#barcode_type').val('');
+        $('#member_field_format_master_id').val('');
         $('#pref_id').val('');
         $('#zip').val('');
         $('#address1').val('');
@@ -272,9 +212,9 @@
     }
 
     function clearValidate() {
-        $('#company_name-validate').text("");
+        $('#field_name-validate').text("");
         $('#sub_domain-validate').text("");
-        $('#barcode_type-validate').text("");
+        $('#member_field_format_master_id-validate').text("");
         $('#pref_id-validate').text("");
         $('#zip-validate').text("");
         $('#address1-validate').text("");
